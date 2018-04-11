@@ -1,0 +1,15 @@
+#!/bin/bash
+if [[ -z "$1" ]]; then
+	echo "Usage (example): luksOpen /dev/sdc2"
+	exit 1
+fi
+
+if [[ ! -e "/dev/mapper/sdb2" ]]; then
+	echo cryptsetup
+	cryptsetup luksOpen "$1" sdb2
+fi
+
+if [[ -z `mount | grep -F /media/crypt` ]]; then
+	echo mount
+	mount /dev/mapper/sdb2
+fi

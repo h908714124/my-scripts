@@ -1,0 +1,15 @@
+#!/bin/bash
+if [[ -z `mount | grep -F /media/crypt` ]]; then
+	echo /media/crypt not mounted
+	exit 1
+fi
+
+if [[ $1 != "-skip" ]] && [[ $1 != "skip" ]]; then
+	cd /media/crypt
+	gpg2 -o /tmp/pwd.txt.gpg --symmetric pwd.txt
+	cp -b /tmp/pwd.txt.gpg ~
+fi
+
+cd
+umount /media/crypt
+cryptsetup luksClose /dev/mapper/sdb2
