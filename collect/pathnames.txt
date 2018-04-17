@@ -1,0 +1,16 @@
+bin
+Documents
+.emacs.d/init.el
+.irssi/config
+.gitconfig
+.ssh
+.bashrc
+.bash_aliases
+.config
+/usr/local/bin/luksOpen
+/usr/local/bin/luksClose
+/etc/hosts
+/etc/udev/rules.d/51-android.rules
+pwd.txt.gpg2
+/etc/fstab
+
