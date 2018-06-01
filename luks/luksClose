@@ -7,7 +7,7 @@ fi
 if [[ $1 != "-skip" ]] && [[ $1 != "skip" ]]; then
 	cd /media/crypt
 	gpg2 -o /tmp/pwd.txt.gpg --symmetric pwd.txt
-	cp -b /tmp/pwd.txt.gpg ~
+	cp -b /tmp/pwd.txt.gpg /home/vgm
 fi
 
 cd
