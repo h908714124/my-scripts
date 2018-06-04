@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -x
+
+rm ~/.java/.userPrefs/prefs.xml
+rm -rf ~/.java/.userPrefs/jetbrains/
+rm -rf ~/.IntelliJIdea2018.1/
