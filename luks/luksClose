@@ -5,9 +5,12 @@ if [[ -z `mount | grep -F /media/crypt` ]]; then
 fi
 
 if [[ $1 != "-skip" ]] && [[ $1 != "skip" ]]; then
+	if [[ -f /tmp/pwd.txt.gpg ]]; then
+		mv --backup=numbered /tmp/pwd.txt.gpg /tmp/pwd.txt.gpg.backup
+	fi
 	cd /media/crypt
-	gpg2 -o /tmp/pwd.txt.gpg --symmetric pwd.txt
-	cp -b /tmp/pwd.txt.gpg /home/vgm
+	gpg2 --batch --passphrase-file close.txt -o /tmp/pwd.txt.gpg --symmetric pwd.txt
+	cp --backup=numbered /tmp/pwd.txt.gpg /home/vgm
 fi
 
 cd
