@@ -4,6 +4,7 @@
 ##
 ## 1. File -> Export settings
 ## 2. close IDE
+## 3. Save settings.jar in a safe place!
 
 set -e
 
@@ -29,7 +30,7 @@ set +x
 ## Remove prefs.xml
 mv ~/.java/.userPrefs/prefs.xml $BACKUP
 
-## ..but retain lines that don't contain the word JetBrains
+## ..but keep lines that don't contain the word JetBrains
 grep -F -v JetBrains $BACKUP/prefs.xml >~/.java/.userPrefs/prefs.xml
 
 ## Remove jetbrains preferences folder
@@ -37,3 +38,6 @@ mv ~/.java/.userPrefs/jetbrains/ $BACKUP
 
 ## Remove idea folder
 mv $IDEA $BACKUP
+
+## Now open idea and re-import settings.jar
+## Done!
