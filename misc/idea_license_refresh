@@ -1,6 +1,13 @@
 #!/bin/bash
 ##
-## Before running you should backup your settings:
+## Before running you should:
+##
+## 1. Check IDEA version -- the folder (see code below)
+##    must exist and be the one you're currently using.
+##    It could exist but be leftover from a previous installation.
+##    In that case, change the script to use the correct IDEA folder.
+##
+## Also don't forget to backup your settings!
 ##
 ## 1. File -> Export settings
 ## 2. close IDE
