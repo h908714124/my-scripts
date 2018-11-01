@@ -38,10 +38,10 @@ if [[ ! -z "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATI
 	exit 0
 fi
 
-set -x
+echo "Creating backup in $BACKUP"
 mkdir -p $BACKUP
-set +x
 
+set -x
 ## Remove prefs.xml
 mv ~/.java/.userPrefs/prefs.xml $BACKUP
 
