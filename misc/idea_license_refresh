@@ -31,6 +31,8 @@ if [[ -d $BACKUP ]]; then
 fi
 
 echo "Please make sure to backup your IDEA settings!"
+echo "(File -> Export settings)"
+echo "Your settings will be lost if you don't have a backup!"
 echo "Continue? [n|Y]"
 read CONFIRMATION
 if [[ ! -z "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATION" != "Y" ]]; then
