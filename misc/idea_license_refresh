@@ -17,7 +17,7 @@ set -e
 
 BACKUP=~/backup/$(date --iso-8601)
 
-IDEA=~/.IntelliJIdea2018.2
+IDEA=~/.IntelliJIdea2018.3
 
 if [[ ! -d $IDEA ]]; then
   echo "Error: Expected IDEA folder not found: $IDEA"
