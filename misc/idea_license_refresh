@@ -2,12 +2,11 @@
 ##
 ## Before running you should:
 ##
-## 1. Check IDEA version -- the folder (see code below)
-##    must exist and be the one you're currently using.
-##    It could exist but be leftover from a previous installation.
-##    In that case, change the script to use the correct IDEA folder.
+## 1. Check IDEA version -- the IDEA folder (see code below)
+##    must exist and belong to the currently used idea installation.
+##    You can override this as follows: ./idea_license_refresh -ideafolder "~/.IntelliJIdea2018.4"
 ##
-## Also don't forget to backup your settings!
+## Reminder to backup your settings!
 ##
 ## 1. File -> Export settings
 ## 2. close IDE
@@ -19,13 +18,31 @@ BACKUP=~/backup/$(date --iso-8601)
 
 IDEA=~/.IntelliJIdea2018.3
 
-if [[ ! -d $IDEA ]]; then
-  echo "Error: Expected IDEA folder not found: $IDEA"
-  echo "Are you using a different IDEA version?"
+if [[ "$1" == "-ideafolder" ]]; then
+  if [[ -n "$2" ]]; then
+    echo "Value expected"
+    exit 1
+  fi
+  IDEA="$2"
+fi
+
+if [[ ! -d "$IDEA" ]]; then
+  echo "IDEA folder not found: $IDEA"
+  echo "You can specify this folder with the -ideafolder option."
   exit 1
 fi
 
-if [[ -d $BACKUP ]]; then
+echo "Found IDEA folder: $IDEA"
+echo "Is this from the idea version that's currently used?"
+echo "Otherwise, start this script with the -ideafolder option."
+echo "[Y|n]"
+read CONFIRMATION
+if [[ ! -z "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATION" != "Y" ]]; then
+  echo "quitting now"
+  exit 0
+fi
+
+if [[ -d "$BACKUP" ]]; then
   echo "Error: Backup folder exists: $BACKUP"
   exit 1
 fi
@@ -33,7 +50,7 @@ fi
 echo "Please make sure to backup your IDEA settings!"
 echo "(File -> Export settings)"
 echo "Your settings will be lost if you don't have a backup!"
-echo "Continue? [n|Y]"
+echo "Continue? [Y|n]"
 read CONFIRMATION
 if [[ ! -z "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATION" != "Y" ]]; then
 	echo "quitting now"
@@ -55,6 +72,7 @@ mv ~/.java/.userPrefs/jetbrains/ $BACKUP
 
 ## Remove idea folder
 mv $IDEA $BACKUP
+set +x
 
-## Now open idea and re-import settings.jar
-## Done!
+echo "Refresh is done."
+echo "It is recommended to also download a fresh idea release now."
