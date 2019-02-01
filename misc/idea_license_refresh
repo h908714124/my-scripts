@@ -14,32 +14,46 @@
 
 set -e
 
-BACKUP=~/backup/$(date --iso-8601)
+BACKUP="$HOME/backup/$(date --iso-8601)"
 
-IDEA=~/.IntelliJIdea2018.3
+IDEA=""
+
+function ask() {
+  read CONFIRMATION
+  if [[ -n "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATION" != "Y" ]]; then
+    echo "quitting now"
+    exit 0
+  fi
+}
 
 if [[ "$1" == "-ideafolder" ]]; then
-  if [[ -n "$2" ]]; then
+  if [[ -z "$2" ]]; then
     echo "Value expected"
     exit 1
   fi
   IDEA="$2"
-fi
-
-if [[ ! -d "$IDEA" ]]; then
-  echo "IDEA folder not found: $IDEA"
-  echo "You can specify this folder with the -ideafolder option."
-  exit 1
-fi
-
-echo "Found IDEA folder: $IDEA"
-echo "Is this from the idea version that's currently used?"
-echo "Otherwise, start this script with the -ideafolder option."
-echo "[Y|n]"
-read CONFIRMATION
-if [[ ! -z "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATION" != "Y" ]]; then
-  echo "quitting now"
-  exit 0
+  if [[ ! -d "$IDEA" ]]; then
+    echo "Folder not found: $IDEA"
+    exit 1
+  fi
+else
+  IDEA="$(ls -a -1 $HOME | grep -F IntelliJIdea | sort | tail -n 1)"
+  if [[ -z "$IDEA" ]]; then
+    echo "IDEA folder not found."
+    echo "You can specify this folder with the -ideafolder option."
+    exit 1
+  fi
+  if [[ -n "$(ls -a -1 $HOME | grep -F IntelliJIdea | sort | head -n -1)" ]]; then
+    echo "Using IDEA folder $IDEA"
+    echo "Other options are:"
+    echo "---"
+    ls -a -1 $HOME | grep -F IntelliJIdea | sort | head -n -1
+    echo "---"
+    echo "You can specify another folder with the -ideafolder option."
+    echo "Continue? [n|Y]"
+    ask
+  fi
+  IDEA="$HOME/$IDEA"
 fi
 
 if [[ -d "$BACKUP" ]]; then
@@ -47,32 +61,36 @@ if [[ -d "$BACKUP" ]]; then
   exit 1
 fi
 
+echo "Using IDEA folder: $IDEA"
+echo
 echo "Please make sure to backup your IDEA settings!"
 echo "(File -> Export settings)"
-echo "Your settings will be lost if you don't have a backup!"
-echo "Continue? [Y|n]"
-read CONFIRMATION
-if [[ ! -z "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATION" != "Y" ]]; then
-	echo "quitting now"
-	exit 0
-fi
+echo "Make sure that you store a copy of your settings.zip outside of $IDEA."
+echo
+echo "Your settings will be lost if you don't have a backup."
+echo "Continue? [n|Y]"
+ask
 
 echo "Creating backup in $BACKUP"
 mkdir -p $BACKUP
 
 set -x
-## Remove prefs.xml
-mv ~/.java/.userPrefs/prefs.xml $BACKUP
 
-## ..but keep lines that don't contain the word JetBrains
-grep -F -v JetBrains $BACKUP/prefs.xml >~/.java/.userPrefs/prefs.xml
+## Remove prefs.xml
+if [[ -f "$HOME/.java/.userPrefs/prefs.xml" ]]; then
+  mv "$HOME/.java/.userPrefs/prefs.xml" $BACKUP
+  ## ..but keep lines that don't contain the word JetBrains
+  grep -F -v JetBrains $BACKUP/prefs.xml >$HOME/.java/.userPrefs/prefs.xml
+fi
 
 ## Remove jetbrains preferences folder
-mv ~/.java/.userPrefs/jetbrains/ $BACKUP
+if [[ -d "$HOME/.java/.userPrefs/jetbrains" ]]; then
+  mv "$HOME/.java/.userPrefs/jetbrains" $BACKUP
+fi
 
 ## Remove idea folder
 mv $IDEA $BACKUP
 set +x
 
 echo "Refresh is done."
-echo "It is recommended to also download a fresh idea release now."
+echo "It is recommended to download a fresh idea release now."
