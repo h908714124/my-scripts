@@ -3,6 +3,7 @@
 	co = checkout
 	ci = commit
 	br = branch --sort=committerdate
+	sl = shortlog -sn
 
 [user]
 	name = h908714124
