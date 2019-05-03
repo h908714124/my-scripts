@@ -43,13 +43,19 @@ else
     echo "You can specify this folder with the -ideafolder option."
     exit 1
   fi
-  if [[ -n "$(ls -a -1 $HOME | grep -F IntelliJIdea | sort | head -n -1)" ]]; then
-    echo "Using IDEA folder $IDEA"
-    echo "Other options are:"
+  if [[ -n "$(ls -t -a -1 $HOME | grep -F IntelliJIdea | head -n -1)" ]]; then
+    echo "Using IDEA folder $HOME/$IDEA"
     echo "---"
-    ls -a -1 $HOME | grep -F IntelliJIdea | sort | head -n -1
+    for F in `ls -t -a -1 $HOME | grep -F IntelliJIdea`; do
+        if [[ "$F" == "$IDEA" ]]; then
+            echo "* $HOME/$F"
+        else
+            echo "  $HOME/$F"
+        fi
+    done
     echo "---"
-    echo "You can specify another folder with the -ideafolder option."
+    echo "If you prefer, you can quit this program now and start over,"
+    echo "specifying another folder with the -ideafolder option."
     echo "Continue? [n|Y]"
     ask
   fi
