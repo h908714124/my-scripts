@@ -74,6 +74,7 @@ echo "(File -> Export settings)"
 echo "Make sure that you store a copy of your settings.zip outside of $IDEA."
 echo
 echo "Your settings will be lost if you don't have a backup."
+echo "Please make sure that IDEA is not running before you proceed."
 echo "Continue? [n|Y]"
 ask
 
