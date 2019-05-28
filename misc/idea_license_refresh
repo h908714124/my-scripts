@@ -14,6 +14,15 @@
 
 set -e
 
+
+function ask() {
+  read CONFIRMATION
+  if [[ -n "$CONFIRMATION" ]] && [[ "$CONFIRMATION" != "y" ]] && [[ "$CONFIRMATION" != "Y" ]]; then
+    echo "quitting now"
+    exit 0
+  fi
+}
+
 HOM=$HOME
 
 while getopts "h:d:" OPTION; do
@@ -32,7 +41,7 @@ while getopts "h:d:" OPTION; do
 done
 
 if [[ -z "$IDEA" ]]; then
-  IDEA="$(find $HOM -mindepth 1 -maxdepth 1 -type d | grep -F IntelliJIdea | sort | tail -n 1)"
+  IDEA="$(find -L $HOM -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea | sort | tail -n 1)"
   if [[ -z "$IDEA" ]]; then
     echo "Folder IDEA folder not found in $HOM."
     echo "You can specify this folder with the -d ( and -h ) options."
@@ -47,13 +56,13 @@ else
 fi
 
 echo "Using IDEA base folder -h = $HOM"
-echo "Using IDEA folder $HOM/$IDEA"
+echo "Using IDEA folder $IDEA"
 echo "---"
-for F in `ls -t -a -1 $HOM | grep -F IntelliJIdea`; do
+for F in $(find -L $HOM -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea); do
     if [[ "$F" == "$IDEA" ]]; then
-        echo "* $HOM/$F"
+        echo "* $F"
     else
-        echo "  $HOM/$F"
+        echo "  $F"
     fi
 done
 echo "---"
@@ -81,7 +90,7 @@ echo "Using IDEA folder: $IDEA"
 echo
 echo "Please make sure to backup your IDEA settings!"
 echo "(File -> Export settings)"
-echo "Please be sure to store a copy of settings.zip outside of $HOM/$IDEA."
+echo "Please be sure to store a copy of settings.zip outside of $IDEA."
 echo
 echo "Your settings will be lost if you don't have a backup."
 echo "Please be sure that IDEA is not running before you proceed."
