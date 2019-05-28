@@ -14,9 +14,55 @@
 
 set -e
 
-BACKUP="$HOME/backup/$(date --iso-8601)"
+HOM=$HOME
 
-IDEA=""
+while getopts "h:d:" OPTION; do
+    case $OPTION in
+    h)
+        HOM=$OPTARG
+        ;;
+    d)
+        IDEA=$OPTARG
+        ;;
+    *)
+        echo "Incorrect options provided"
+        exit 1
+        ;;
+    esac
+done
+
+if [[ -z "$IDEA" ]]; then
+  IDEA="$(ls -a -1 $HOM | grep -F IntelliJIdea | sort | tail -n 1)"
+  if [[ -z "$IDEA" ]]; then
+    echo "Folder IDEA folder not found in $HOM."
+    echo "You can specify this folder with the -d ( and -h ) options."
+    exit 1
+  fi
+else
+  if [[ ! -d "${HOM}/${IDEA}" ]]; then
+    echo "IDEA folder not found in ${HOM}"
+    echo "You can specify this folder with the -d ( and -h ) options."
+    exit 1
+  fi
+fi
+
+echo "Using IDEA base folder -h = $HOM"
+echo "Using IDEA folder $HOM/$IDEA"
+echo "---"
+for F in `ls -t -a -1 $HOM | grep -F IntelliJIdea`; do
+    if [[ "$F" == "$IDEA" ]]; then
+        echo "* $HOM/$F"
+    else
+        echo "  $HOM/$F"
+    fi
+done
+echo "---"
+echo "If you prefer, you can quit this program now and start over,"
+echo "specifying another folder with the -h and -d options."
+echo "Continue? [n|Y]"
+ask
+
+BACKUP="$HOME/backup/$(date --iso-8601)"
 
 function ask() {
   read CONFIRMATION
@@ -25,42 +71,6 @@ function ask() {
     exit 0
   fi
 }
-
-if [[ "$1" == "-ideafolder" ]]; then
-  if [[ -z "$2" ]]; then
-    echo "Value expected"
-    exit 1
-  fi
-  IDEA="$2"
-  if [[ ! -d "$IDEA" ]]; then
-    echo "Folder not found: $IDEA"
-    exit 1
-  fi
-else
-  IDEA="$(ls -a -1 $HOME | grep -F IntelliJIdea | sort | tail -n 1)"
-  if [[ -z "$IDEA" ]]; then
-    echo "IDEA folder not found."
-    echo "You can specify this folder with the -ideafolder option."
-    exit 1
-  fi
-  if [[ -n "$(ls -t -a -1 $HOME | grep -F IntelliJIdea | head -n -1)" ]]; then
-    echo "Using IDEA folder $HOME/$IDEA"
-    echo "---"
-    for F in `ls -t -a -1 $HOME | grep -F IntelliJIdea`; do
-        if [[ "$F" == "$IDEA" ]]; then
-            echo "* $HOME/$F"
-        else
-            echo "  $HOME/$F"
-        fi
-    done
-    echo "---"
-    echo "If you prefer, you can quit this program now and start over,"
-    echo "specifying another folder with the -ideafolder option."
-    echo "Continue? [n|Y]"
-    ask
-  fi
-  IDEA="$HOME/$IDEA"
-fi
 
 if [[ -d "$BACKUP" ]]; then
   echo "Error: Backup folder exists: $BACKUP"
@@ -71,10 +81,10 @@ echo "Using IDEA folder: $IDEA"
 echo
 echo "Please make sure to backup your IDEA settings!"
 echo "(File -> Export settings)"
-echo "Make sure that you store a copy of your settings.zip outside of $IDEA."
+echo "Please be sure to store a copy of settings.zip outside of $HOM/$IDEA."
 echo
 echo "Your settings will be lost if you don't have a backup."
-echo "Please make sure that IDEA is not running before you proceed."
+echo "Please be sure that IDEA is not running before you proceed."
 echo "Continue? [n|Y]"
 ask
 
