@@ -32,7 +32,7 @@ while getopts "h:d:" OPTION; do
 done
 
 if [[ -z "$IDEA" ]]; then
-  IDEA="$(ls -a -1 $HOM | grep -F IntelliJIdea | sort | tail -n 1)"
+  IDEA="$(find $HOM -mindepth 1 -maxdepth 1 -type d | grep -F IntelliJIdea | sort | tail -n 1)"
   if [[ -z "$IDEA" ]]; then
     echo "Folder IDEA folder not found in $HOM."
     echo "You can specify this folder with the -d ( and -h ) options."
