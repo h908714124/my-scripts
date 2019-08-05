@@ -23,13 +23,8 @@ function ask() {
   fi
 }
 
-HOM=$HOME
-
-while getopts "h:d:" OPTION; do
+while getopts "d:" OPTION; do
     case $OPTION in
-    h)
-        HOM=$OPTARG
-        ;;
     d)
         IDEA=$OPTARG
         ;;
@@ -40,34 +35,25 @@ while getopts "h:d:" OPTION; do
     esac
 done
 
-if [[ -z "$IDEA" ]]; then
-  IDEA="$(find -L $HOM -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea | sort | tail -n 1)"
-  if [[ -z "$IDEA" ]]; then
-    echo "Folder IDEA folder not found in $HOM."
-    echo "You can specify this folder with the -d ( and -h ) options."
-    exit 1
-  fi
-else
-  if [[ ! -d "${HOM}/${IDEA}" ]]; then
-    echo "IDEA folder not found in ${HOM}"
-    echo "You can specify this folder with the -d ( and -h ) options."
-    exit 1
-  fi
+if [[ ! -d "${HOME}/${IDEA}" ]]; then
+  echo "IDEA folder not found in $HOME"
+  echo "You can specify this folder with the -d option."
+  exit 1
 fi
 
-echo "Using IDEA base folder -h = $HOM"
-echo "Using IDEA folder $IDEA"
-echo "---"
-for F in $(find -L $HOM -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea); do
+echo "Using IDEA folder ${HOME}/${IDEA}."
+echo "Listing all possible values for the -d option:"
+echo "---------------------------------"
+for F in $(find -L $HOME -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea); do
     if [[ "$F" == "$IDEA" ]]; then
         echo "* $F"
     else
         echo "  $F"
     fi
 done
-echo "---"
+echo "---------------------------------"
 echo "If you prefer, you can quit this program now and start over,"
-echo "specifying another folder with the -h and -d options."
+echo "specifying another folder with the -d option."
 echo "Continue? [n|Y]"
 ask
 
