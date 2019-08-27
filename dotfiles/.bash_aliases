@@ -4,6 +4,7 @@ alias fgrep='ack -Q'
 alias pull="git pull origin \$(git rev-parse --abbrev-ref HEAD)"
 alias push="git push origin \$(git rev-parse --abbrev-ref HEAD)"
 alias show="git show"
+alias br='git br'
 alias log='git log'
 alias log1='git log -n1'
 alias log2='git log -n2'
