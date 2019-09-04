@@ -23,6 +23,10 @@ function ask() {
   fi
 }
 
+function find_idea_folder() {
+    find -L $HOME -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea
+}
+
 while getopts "d:" OPTION; do
     case $OPTION in
     d)
@@ -35,16 +39,18 @@ while getopts "d:" OPTION; do
     esac
 done
 
-if [[ ! -d "${HOME}/${IDEA}" ]]; then
+if [[ -z ${IDEA} ]] || [[ ! -d "${IDEA}" ]]; then
   echo "IDEA folder not found in $HOME"
   echo "You can specify this folder with the -d option."
+  echo "Possible values are:"
+  find_idea_folder
   exit 1
 fi
 
-echo "Using IDEA folder ${HOME}/${IDEA}."
+echo "Using IDEA folder ${IDEA}."
 echo "Listing all possible values for the -d option:"
 echo "---------------------------------"
-for F in $(find -L $HOME -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea); do
+for F in $(find_idea_folder); do
     if [[ "$F" == "$IDEA" ]]; then
         echo "* $F"
     else
