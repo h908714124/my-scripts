@@ -1,11 +1,14 @@
 alias ll='ls --color=auto -Llart'
 alias pwd='pwd -P'
 alias fgrep='ack -Q'
-alias pull="git pull origin \$(git rev-parse --abbrev-ref HEAD)"
-alias push="git push origin \$(git rev-parse --abbrev-ref HEAD)"
-alias show="git show"
-alias br='git br'
+alias pull='git pull origin $(git rev-parse --abbrev-ref HEAD)'
+alias push='git push origin $(git rev-parse --abbrev-ref HEAD)'
+alias show='git show'
 alias log='git log'
+alias less='most'
+alias show='git show'
+alias br='git branch'
+alias st='git status'
 alias log1='git log -n1'
 alias log2='git log -n2'
 alias log3='git log -n3'
