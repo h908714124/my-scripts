@@ -30,6 +30,10 @@ function find_idea_folder() {
 while getopts "d:" OPTION; do
     case $OPTION in
     d)
+	if [[ ! -d "$OPTARG" ]]; then
+		echo "Invalid IDEA folder specified: Not a directory"
+		exit 1
+	fi
         IDEA=$OPTARG
         ;;
     *)
@@ -40,8 +44,8 @@ while getopts "d:" OPTION; do
 done
 
 if [[ -z ${IDEA} ]] || [[ ! -d "${IDEA}" ]]; then
-  echo "IDEA folder not found in $HOME"
-  echo "You can specify this folder with the -d option."
+  echo "IDEA folder not specified."
+  echo "You must specify the full path of this folder with the -d option."
   echo "Possible values are:"
   find_idea_folder
   exit 1
