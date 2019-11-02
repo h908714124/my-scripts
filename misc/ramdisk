@@ -1,0 +1,9 @@
+#!/bin/bash
+# Put this line in /etc/fstab:
+# none                                      /mnt/ramdisk            ramfs   noauto,size=128M,mode=0770 0 0
+
+if [[ -z `mount | fgrep ramdisk` ]]; then
+	mount /mnt/ramdisk/
+	chown vgm: /mnt/ramdisk
+fi
+
