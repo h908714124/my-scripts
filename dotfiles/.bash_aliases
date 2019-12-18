@@ -22,4 +22,5 @@ alias log7='git log -n7'
 alias log8='git log -n8'
 alias log9='git log -n9'
 alias mkdir='mkdir -p'
+alias cb='cp --backup=numbered'
 
