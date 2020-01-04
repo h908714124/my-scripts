@@ -17,4 +17,6 @@
         helper = cache --timeout=3600
 [core]
         pager = less -F -X
+[pull]
+	rebase = true
 
