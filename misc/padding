@@ -1,0 +1,19 @@
+#!/bin/bash
+
+addLine () {
+	echo -n "PADDING " >>"$1"
+	openssl rand -base64 23 >>"$1"
+}
+
+FILE="$1"
+cp "$FILE" "${FILE}_TAIL"
+for i in `seq 100`; do
+	addLine "${FILE}_HEAD"
+	addLine "${FILE}_TAIL"
+done
+
+cat "${FILE}_TAIL" >>"${FILE}_HEAD"
+
+mv --backup=numbered "${FILE}_HEAD" "$FILE"
+rm "${FILE}_TAIL"
+
