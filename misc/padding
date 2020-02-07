@@ -6,14 +6,22 @@ addLine () {
 }
 
 FILE="$1"
-cp "$FILE" "${FILE}_TAIL"
+HEAD=HEAD
+OUT=OUT
+
+cp "$FILE" "${FILE}_${OUT}"
 for i in `seq 100`; do
-	addLine "${FILE}_HEAD"
-	addLine "${FILE}_TAIL"
+	addLine "${FILE}_${HEAD}"
+	addLine "${FILE}_${OUT}"
 done
 
-cat "${FILE}_TAIL" >>"${FILE}_HEAD"
+cat "${FILE}_${OUT}" >>"${FILE}_${HEAD}"
+mv --backup=numbered "${FILE}_${HEAD}" "${FILE}_${OUT}" 
 
-mv --backup=numbered "${FILE}_HEAD" "$FILE"
-rm "${FILE}_TAIL"
+if [[ "--replace" == "$2" ]]; then
+  mv --backup=numbered "${FILE}_${OUT}" "$FILE"
+  echo "$FILE was modified"
+else
+  echo "${FILE}_${OUT} created"
+fi
 
