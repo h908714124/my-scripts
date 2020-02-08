@@ -18,6 +18,8 @@ alias log8='git log -n8'
 alias log9='git log -n9'
 alias mkdir='mkdir -p'
 alias cb='cp --backup=numbered'
-alias sudo='sudo '
+alias sudo='sudo ' #man bash
 alias cob='git co -b'
-
+alias youtube-dl='cd ~/Videos/ && youtube-dl'
+alias my-scripts='cd ~/workspace/my-scripts'
+alias master='git co master'
