@@ -17,4 +17,4 @@ if [[ $DIFF != "200" ]]; then
 fi
 
 mv --backup=numbered "${FILE}_${OUT}" "$FILE"
-echo "$FILE was changed"
+echo "$FILE was modified"

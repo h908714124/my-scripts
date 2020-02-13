@@ -1,9 +1,18 @@
 #!/bin/bash
 
+set -e
+
 addLine () {
 	echo -n "PADDING " >>"$1"
 	openssl rand -base64 23 >>"$1"
 }
+
+CLOBBER=N
+
+if [[ "-x" == "$1" ]] || [[ "--clobber" == "$1" ]]; then
+  CLOBBER=Y
+  shift
+fi
 
 FILE="$1"
 HEAD=HEAD
@@ -18,7 +27,7 @@ done
 cat "${FILE}_${OUT}" >>"${FILE}_${HEAD}"
 mv --backup=numbered "${FILE}_${HEAD}" "${FILE}_${OUT}" 
 
-if [[ "-x" == "$2" ]] || [[ "--clobber" == "$2" ]]; then
+if [[ "Y" == "$CLOBBER" ]]; then
   mv --backup=numbered "${FILE}_${OUT}" "$FILE"
   echo "$FILE was modified"
 else
