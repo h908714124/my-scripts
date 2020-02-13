@@ -1,0 +1,17 @@
+#!/bin/bash
+
+FILE="$1"
+HEAD=HEAD
+OUT=OUT
+
+grep -e -v ^PADDING  "$FILE" >"${FILE}_${OUT}"
+N1=`wc -l "$FILE"`
+N2=`wc -l "${FILE}_${OUT}"`
+DIFF=$(( N1 - N2 ))
+if [[ $DIFF != "200" ]]; then
+  echo "Diff fail!"
+  exit 1
+fi
+
+mv "${FILE}_${OUT}" "$FILE"
+echo "$FILE was changed"
