@@ -18,7 +18,7 @@ done
 cat "${FILE}_${OUT}" >>"${FILE}_${HEAD}"
 mv --backup=numbered "${FILE}_${HEAD}" "${FILE}_${OUT}" 
 
-if [[ "--replace" == "$2" ]]; then
+if [[ "-x" == "$2" ]] || [[ "--clobber" == "$2" ]]; then
   mv --backup=numbered "${FILE}_${OUT}" "$FILE"
   echo "$FILE was modified"
 else
