@@ -11,10 +11,7 @@ N1=`wc -l "$FILE" | cut -d" " -f1`
 N2=`wc -l "${FILE}_${OUT}" | cut -d" " -f1`
 DIFF=$(( N1 - N2 ))
 
-if [[ $DIFF != "200" ]]; then
-  echo "Diff fail!"
-  exit 1
-fi
+echo "$DIFF lines removed"
 
 mv --backup=numbered "${FILE}_${OUT}" "$FILE"
 echo "$FILE was modified"
