@@ -7,16 +7,21 @@ addLine () {
 	openssl rand -base64 23 >>"$1"
 }
 
-CLOBBER=N
+CLOBBER=Y
 
-if [[ "-x" == "$1" ]] || [[ "--clobber" == "$1" ]]; then
-  CLOBBER=Y
+if [[ "-x" == "$1" ]] || [[ "--noclobber" == "$1" ]]; then
+  CLOBBER=N
   shift
 fi
 
 FILE="$1"
 HEAD=HEAD
 OUT=OUT
+
+if [[ -z "$FILE" ]]; then
+	echo "Argument: file"
+	exit 1
+fi
 
 cp "$FILE" "${FILE}_${OUT}"
 for i in `seq 100`; do
