@@ -1,4 +1,5 @@
 alias ll='ls --color=auto -Llart'
+alias lll='ls -1'
 alias pwd='pwd -P'
 alias ack='ack -Q'
 alias pull='git pull origin $(git rev-parse --abbrev-ref HEAD)'
