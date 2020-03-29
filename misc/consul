@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ -z `docker ps -a | grep -F dev-consul` ]]; then
+  docker run --name=dev-consul -e CONSUL_BIND_INTERFACE=eth0 consul
+else
+  docker start -a dev-consul
+fi

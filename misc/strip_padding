@@ -1,17 +1,3 @@
 #!/bin/bash
+grep -E -v ^PADDING <&0
 
-set -e
-
-FILE="$1"
-OUT=OUT
-
-grep -E -v ^PADDING  "$FILE" >"${FILE}_${OUT}"
-
-N1=`wc -l "$FILE" | cut -d" " -f1`
-N2=`wc -l "${FILE}_${OUT}" | cut -d" " -f1`
-DIFF=$(( N1 - N2 ))
-
-echo "$DIFF lines removed"
-
-mv --backup=numbered "${FILE}_${OUT}" "$FILE"
-echo "$FILE was modified"
