@@ -1,3 +1,9 @@
 #!/bin/bash
-grep -E -v ^PADDING <&0
 
+if [[ -z "$1" ]]; then
+	grep -E -v ^PADDING <&0
+else
+	TMP_FILE="/tmp/`openssl rand -hex 12`.txt"
+	grep -E -v ^PADDING <"$1" >"$TMP_FILE"
+	mv "$TMP_FILE" "$1"
+fi
