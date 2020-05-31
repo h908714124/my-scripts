@@ -1,6 +1,6 @@
 alias cd-='cd -'
 alias l='ls -1'
-alias ll='ls --color=auto -Llart'
+alias ll='ls --color=auto -lart'
 alias lll='ls -1'
 alias clear='clear && reset'
 alias reset='clear && reset'
