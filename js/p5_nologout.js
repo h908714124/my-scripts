@@ -8,5 +8,5 @@ setInterval(function() {
 		$('.selected').prev().click();
 	}
 
-}, 120000)
+}, 120000);
 
