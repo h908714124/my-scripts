@@ -1,9 +1,12 @@
 var i = 0;
 setInterval(function() {
-  if (i++ === 0) {
-    $('.selected').next().click();
-  } else {
-    $('.selected').prev().click();
-  }
-}, 30000)
+
+
+	if ((i++ % 2) === 0) {
+		$('.selected').next().click();
+	} else {
+		$('.selected').prev().click();
+	}
+
+}, 120000)
 
