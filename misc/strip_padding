@@ -6,4 +6,5 @@ else
 	TMP_FILE="/tmp/`openssl rand -hex 12`.txt"
 	grep -E -v ^PADDING <"$1" >"$TMP_FILE"
 	mv "$TMP_FILE" "$1"
+        echo "${1} was modified"
 fi
