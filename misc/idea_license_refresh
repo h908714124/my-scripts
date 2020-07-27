@@ -1,16 +1,4 @@
 #!/bin/bash
-##
-## Before running you should:
-##
-## 1. Check IDEA version -- the IDEA folder (see code below)
-##    must exist and belong to the currently used idea installation.
-##    You can override this as follows: ./idea_license_refresh -ideafolder "~/.IntelliJIdea2018.4"
-##
-## Reminder to backup your settings!
-##
-## 1. File -> Export settings
-## 2. close IDE
-## 3. Save settings.jar in a safe place!
 
 set -e
 
@@ -26,6 +14,16 @@ function ask() {
 function find_idea_folder() {
     find -L $HOME -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea
     find -L ${HOME}/.config/JetBrains/ -mindepth 1 -maxdepth 1 -xtype d | grep -F IntelliJIdea
+}
+
+function show_idea_folder_options() {
+    for F in $(find_idea_folder); do
+        if [[ "$F" == "$IDEA" ]]; then
+            echo "* $F"
+        else
+            echo "  $F"
+        fi
+    done
 }
 
 while getopts "d:" OPTION; do
@@ -48,20 +46,14 @@ if [[ -z ${IDEA} ]] || [[ ! -d "${IDEA}" ]]; then
   echo "IDEA folder not specified."
   echo "You must specify the full path of this folder with the -d option."
   echo "Possible values are:"
-  find_idea_folder
+  show_idea_folder_options
   exit 1
 fi
 
 echo "Using IDEA folder ${IDEA}."
 echo "Listing all possible values for the -d option:"
 echo "---------------------------------"
-for F in $(find_idea_folder); do
-    if [[ "$F" == "$IDEA" ]]; then
-        echo "* $F"
-    else
-        echo "  $F"
-    fi
-done
+show_idea_folder_options
 echo "---------------------------------"
 echo "If you prefer, you can quit this program now and start over,"
 echo "specifying another folder with the -d option."
