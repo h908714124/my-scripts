@@ -1,4 +1,4 @@
-alias bagrep='grep -F -B10 -A10'
+alias abgrep='grep -F -B10 -A10'
 alias cd-='cd -'
 alias l='ls -1'
 alias ll='ls --color=auto -lart'
