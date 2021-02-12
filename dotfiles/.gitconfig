@@ -3,8 +3,6 @@
 	co = checkout
 	ci = commit
 	br = branch --sort=committerdate
-	sl = shortlog -sn
-
 [user]
 	name = h908714124
 	email = kraftdurchblumen@gmx.de
@@ -12,11 +10,9 @@
 	tool = meld
 [rerere]
         enabled = true
-
 [credential]
         helper = cache --timeout=3600
 [core]
         pager = less -F -X
 [pull]
-	rebase = true
-
+        ff = only
