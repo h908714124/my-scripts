@@ -55,8 +55,8 @@ echo "Listing all possible values for the -d option:"
 echo "---------------------------------"
 show_idea_folder_options
 echo "---------------------------------"
-echo "If you prefer, you can quit this program now and start over,"
-echo "specifying another folder with the -d option."
+echo "If you disagree, you can quit now and start over,"
+echo "and specify a different folder with the -d option."
 echo "Continue? [n|Y]"
 ask
 
