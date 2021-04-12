@@ -30,3 +30,5 @@ alias mkdir='mkdir -p'
 alias sudo='sudo ' #man bash
 alias videos='cd ~/Videos'
 alias pictures='cd ~/Pictures'
+alias cherrypick='git cherry-pick'
+
