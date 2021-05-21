@@ -11,6 +11,7 @@ if [[ ! -d /mnt/ramdisk ]]; then
 fi
 
 sudo mount -t ramfs -o size=2048M ramfs /mnt/ramdisk
-sudo chown -R ${SUDO_USER}: /mnt/ramdisk/
+OLD_USER=$USER
+sudo chown -R ${OLD_USER}: /mnt/ramdisk/
 mount | fgrep /mnt/ramdisk
 
