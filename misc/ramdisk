@@ -1,9 +1,10 @@
 #!/bin/bash
-# Put this line in /etc/fstab:
-# none                                      /mnt/ramdisk            ramfs   noauto,size=128M,mode=0770 0 0
+set -e
 
-if [[ -z `mount | fgrep ramdisk` ]]; then
-	mount /mnt/ramdisk/
-	chown vgm: /mnt/ramdisk
+if [[ ! -d /mnt/ramdisk ]]; then
+  sudo mkdir /mnt/ramdisk
 fi
+
+sudo mount -t ramfs -o size=2048M ramfs /mnt/ramdisk
+sudo chown -R ${SUDO_USER}: /mnt/ramdisk/
 
