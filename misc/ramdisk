@@ -1,10 +1,16 @@
 #!/bin/bash
 set -e
 
+if [[ ! -z `mount | fgrep /mnt/ramdisk` ]]; then
+  mount | fgrep /mnt/ramdisk
+  exit 	
+fi
+
 if [[ ! -d /mnt/ramdisk ]]; then
   sudo mkdir /mnt/ramdisk
 fi
 
 sudo mount -t ramfs -o size=2048M ramfs /mnt/ramdisk
 sudo chown -R ${SUDO_USER}: /mnt/ramdisk/
+mount | fgrep /mnt/ramdisk
 
