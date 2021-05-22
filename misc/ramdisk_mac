@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+if [[ ! -z `mount | fgrep RAM` ]]; then
+  mount | fgrep RAM
+  exit 	
+fi
+
+diskutil erasevolume HFS+ 'RAM Disk' `hdiutil attach -nobrowse -nomount ram://4096`
+mount | fgrep RAM
