@@ -14,5 +14,6 @@
         helper = cache --timeout=3600
 [core]
         pager = less -F -X
+	longpaths = true
 [pull]
         ff = only
