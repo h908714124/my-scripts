@@ -4,8 +4,8 @@
 	ci = commit
 	br = branch --sort=committerdate
 [user]
-	name = h908714124
-	email = kraftdurchblumen@gmx.de
+	name = jbock
+	email = jbock-java@gmx.de
 [merge]
 	tool = meld
 [rerere]
