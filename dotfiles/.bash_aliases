@@ -6,7 +6,10 @@ alias pwd='pwd -P'
 alias ack='ack -Q'
 alias pull='git pull origin $(git rev-parse --abbrev-ref HEAD)'
 alias push='git push origin $(git rev-parse --abbrev-ref HEAD)'
-alias show='git show'
+alias gitshow='git show --color-words'
+alias show=gitshow
+alias gitdiff='git diff --color-words'
+alias d=gitdiff
 alias glg='git log'
 alias br='git branch --sort=committerdate'
 alias st='git status'
