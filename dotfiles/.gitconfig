@@ -17,3 +17,4 @@
 	longpaths = true
 [pull]
         ff = only
+	rebase = true
