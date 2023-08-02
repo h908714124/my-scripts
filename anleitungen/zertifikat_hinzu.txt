@@ -1,0 +1,5 @@
+#!/bin/bash
+
+openssl x509 -outform der -in certificate.pem -out certificate.der
+keytool -import -alias sams-konsens-tst-hessen -keystore /opt/vgm/.jdks/corretto-17.0.8/lib/security/cacerts  -file certificate.der
+"changeit"

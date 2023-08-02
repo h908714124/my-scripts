@@ -7,9 +7,9 @@ if [[ -f ~/.git-prompt.sh ]]; then
   . ~/.git-prompt.sh
 fi
 
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
 
 GIT_PROMPT_ONLY_IN_REPO=1
 GIT_PS1_SHOWCOLORHINTS=1
