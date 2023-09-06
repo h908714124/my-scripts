@@ -1,0 +1,1 @@
+git-filter-repo --path core/ --path .gitignore --path publish_core --path-rename publish_core:publish
