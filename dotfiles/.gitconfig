@@ -17,4 +17,8 @@
 	longpaths = true
 [pull]
         ff = only
-	rebase = true
+#	rebase = true
+#[http]
+#	proxy = my-proxy.com:8080
+#       sslVerify = false
+
