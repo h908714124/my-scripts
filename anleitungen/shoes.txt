@@ -1,5 +1,6 @@
 about:logging
 New log modules: nsHttp:3
-fgrep  'E/nsHttp uri=https://vh55.vhcdn.com/sch' loggings.txt-main.1037.moz_log
-curl 'https://vh55.vhcdn.com/sch/e25317d30f8b95eccb2d3d77d0c24384/26276711d2e7226f14fca6025413ef54/360/0.ts?host=vh-55&version=2&uid=332701653&aid=528119&j=eyJ2byI6LTEsImNwIjoxLCJncyI6ZmFsc2UsImNwcyI6MCwiY2MiOjE5NywicGwiOiIifQ%3D%3D&s=4a7357ffa857081622118d2f97f5be88' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Origin: https://player02.getcourse.ru' -H 'Connection: keep-alive' -H 'Referer: https://player02.getcourse.ru/' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: cross-site' -O
-
+fgrep  'E/nsHttp uri=https://vh55.vhcdn.com/sch' loggings.txt-main.1037.moz_log >302418442.txt
+cut -f6 -d' ' 302418442.txt | cut -c 5- >urls_302418442.txt >urls_302418442.txt
+cd shoes
+./download urls_302418442.txt
