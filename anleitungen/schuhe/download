@@ -39,6 +39,7 @@ cd $MODULE
 for S in ${URLS_CLEAN[@]}; do
   echo $S
   dl_chunk "$S"
+  sleep 1
 done
 
 merge_chunks $MODULE
