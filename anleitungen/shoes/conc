@@ -15,4 +15,4 @@ done
 
 declare JOINED=$(join_strings ${FILES[@]})
 
-ffmpeg -i "concat:$JOINED" -c copy output.ts
+ffmpeg -y -i "concat:$JOINED" -c copy output.ts
