@@ -9,7 +9,7 @@ merge_chunks () {
   declare -a local FILES
   local INDEX=0
 
-  for S in $(ls -rt1 *.ts | grep -E ^\\d); do
+  for S in $(ls -1 *.ts | grep -E ^\\d | java -jar sort-by-filename.jar); do
     FILES[INDEX]=$S
     INDEX=$(( INDEX + 1 ))
   done
