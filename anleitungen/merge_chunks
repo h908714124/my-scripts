@@ -15,6 +15,6 @@ merge_chunks () {
   done
 
   local JOINED=$(join_strings ${FILES[@]})
-  ffmpeg -y -i "concat:$JOINED" -c copy output.ts
+  ffmpeg -y -i "concat:$JOINED" -c copy ${1}.mp4
 }
 

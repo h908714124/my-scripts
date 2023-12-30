@@ -20,10 +20,11 @@ dl_chunk() {
 }
 
 FILE=$1
+MODULE=$2
 
-if [[ -z $FILE ]]; then
-  echo "Syntax: $0 FILE"
-  echo "Example: $0 loggings.txt-main.1037.moz_log"
+if [[ -z $FILE -o -z $MODULE ]]; then
+  echo "Syntax: $0 FILE NAME"
+  echo "Example: $0 loggings.txt-main.1037.moz_log M01L03"
   exit 1
 fi
 
@@ -31,10 +32,14 @@ URLS=$(fgrep  'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
 
 URLS_CLEAN=$(cut -f6 -d' ' $FILES | cut -c 5-)
 
+rm -rf $MODULE
+mkdir $MODULE
+cd $MODULE
+
 for S in ${URLS_CLEAN[@]}; do
   echo $S
 #  dl_chunk "$S"
 done
 
-#merge_chunks
+#merge_chunks $MODULE
 
