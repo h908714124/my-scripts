@@ -1,8 +1,10 @@
 #!/bin/bash -x
+# about:logging
+# New log modules: nsHttp:3
 
-source merge_files
+source merge_chunks
 
-function download() {
+dl_chunk() {
   curl "$1" \
     -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0' \
     -H 'Accept: */*' \
@@ -21,17 +23,18 @@ FILE=$1
 
 if [[ -z $FILE ]]; then
   echo "Syntax: $0 FILE"
+  echo "Example: $0 loggings.txt-main.1037.moz_log"
   exit 1
 fi
 
-FILES=$(fgrep  'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
+URLS=$(fgrep  'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
 
-FILES_CLEAN=$(cut -f6 -d' ' $FILES | cut -c 5-)
+URLS_CLEAN=$(cut -f6 -d' ' $FILES | cut -c 5-)
 
-for S in ${FILES_CLEAN[@]}; do
+for S in ${URLS_CLEAN[@]}; do
   echo $S
-#  download "$S"
+#  dl_chunk "$S"
 done
 
-#merge_files
+#merge_chunks
 
