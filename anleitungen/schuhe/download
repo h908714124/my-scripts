@@ -2,6 +2,7 @@
 # about:logging
 # New log modules: nsHttp:3
 
+ulimit -n 8240
 source merge_chunks
 
 dl_chunk() {
@@ -28,7 +29,7 @@ if [[ -z $FILE ]]; then
 fi
 
 MODULE="${FILE%%.*}"
-URLS=$(fgrep 'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
+URLS=$(fgrep 'E/nsHttp uri=https://' $FILE | grep -E '\d+\.ts')
 
 URLS_CLEAN=$(cut -f6 -d' ' $FILE | cut -c 5-)
 
