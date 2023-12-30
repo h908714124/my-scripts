@@ -28,7 +28,7 @@ if [[ -z $FILE -o -z $MODULE ]]; then
   exit 1
 fi
 
-URLS=$(fgrep  'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
+URLS=$(fgrep 'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
 
 URLS_CLEAN=$(cut -f6 -d' ' $FILES | cut -c 5-)
 
