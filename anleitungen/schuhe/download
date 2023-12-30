@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # about:logging
 # New log modules: nsHttp:3
 
@@ -20,14 +20,14 @@ dl_chunk() {
 }
 
 FILE=$1
-MODULE=$2
 
-if [[ -z $FILE -o -z $MODULE ]]; then
-  echo "Syntax: $0 FILE NAME"
-  echo "Example: $0 loggings.txt-main.1037.moz_log M01L03"
+if [[ -z $FILE ]]; then
+  echo "Syntax: $0 FILE"
+  echo "Example: $0 M01L03.txt"
   exit 1
 fi
 
+MODULE="${FILE%%.*}"
 URLS=$(fgrep 'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
 
 URLS_CLEAN=$(cut -f6 -d' ' $FILES | cut -c 5-)
