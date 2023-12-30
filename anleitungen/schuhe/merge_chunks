@@ -10,7 +10,7 @@ merge_chunks () {
   local INDEX=0
 
   # https://github.com/jbock-java/modular-thermosiphon/tree/sort-by-filename
-  for S in $(ls -1 *.ts | grep -E ^\\d | java -jar sort-by-filename.jar); do
+  for S in $(ls -1 *.ts | grep -E ^\\d | java -jar ../sort-by-filename.jar); do
     FILES[INDEX]=$S
     INDEX=$(( INDEX + 1 ))
   done
