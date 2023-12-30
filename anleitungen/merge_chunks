@@ -1,0 +1,20 @@
+#!/bin/bash
+
+join_strings () { 
+  local IFS="|"; 
+  echo "$*"; 
+}
+
+merge_chunks () {
+  declare -a local FILES
+  local INDEX=0
+
+  for S in $(ls -rt1 *.ts | grep -E ^\\d); do
+    FILES[INDEX]=$S
+    INDEX=$(( INDEX + 1 ))
+  done
+
+  local JOINED=$(join_strings ${FILES[@]})
+  ffmpeg -y -i "concat:$JOINED" -c copy output.ts
+}
+
