@@ -1,0 +1,18 @@
+#!/bin/bash
+
+join_strings () { 
+  local IFS="|"; 
+  echo "$*"; 
+}
+
+declare -a FILES
+
+declare INDEX=0
+for S in $(ls -rt1 *.ts | grep -E ^\\d); do
+  FILES[INDEX]=$S
+  INDEX=$(( INDEX + 1 ))
+done
+
+declare JOINED=$(join_strings ${FILES[@]})
+
+ffmpeg -i "concat:$JOINED" -c copy output.ts
