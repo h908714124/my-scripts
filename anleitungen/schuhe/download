@@ -30,7 +30,7 @@ fi
 MODULE="${FILE%%.*}"
 URLS=$(fgrep 'E/nsHttp uri=https://vh55.vhcdn.com/sch' $FILE)
 
-URLS_CLEAN=$(cut -f6 -d' ' $FILES | cut -c 5-)
+URLS_CLEAN=$(cut -f6 -d' ' $FILE | cut -c 5-)
 
 rm -rf $MODULE
 mkdir $MODULE
@@ -38,8 +38,8 @@ cd $MODULE
 
 for S in ${URLS_CLEAN[@]}; do
   echo $S
-#  dl_chunk "$S"
+  dl_chunk "$S"
 done
 
-#merge_chunks $MODULE
+merge_chunks $MODULE
 
