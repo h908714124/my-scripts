@@ -31,7 +31,7 @@ fi
 MODULE="${FILE%%.*}"
 URLS=$(fgrep 'E/nsHttp uri=https://' $FILE | grep -E '\d+\.ts')
 
-URLS_CLEAN=$(cut -f6 -d' ' $FILE | cut -c 5-)
+URLS_CLEAN=$(cut -f6 -d' ' $FILE | cut -c 5- | uniq)
 
 rm -rf $MODULE
 mkdir $MODULE
