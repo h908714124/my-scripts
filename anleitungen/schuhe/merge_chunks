@@ -5,6 +5,16 @@ join_strings () {
   echo "$*"; 
 }
 
+check_gaps () {
+  local MAX=$(ls -1 *.ts | grep -E ^\\d | awk 'function max(a,b){if(a>b){return a}else{return b}}BEGIN{FS=".";m=0}{m=max(m,$1)}END{print m}')
+  for S in $(seq 0 $MAX); do
+    if [[ ! -f ${S}.ts ]]; then
+      echo "Missing: $S"
+      exit 1
+    fi
+  done
+}
+
 merge_chunks () {
   declare -a local FILES
   local INDEX=0

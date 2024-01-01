@@ -43,5 +43,6 @@ for S in ${URLS_CLEAN[@]}; do
   sleep 1
 done
 
+check_gaps
 merge_chunks $MODULE
 
