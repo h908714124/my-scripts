@@ -1,6 +1,6 @@
 #!/bin/bash -e
 IFS=$'\n\t'
-rm gepickt.txt
+rm -f gepickt.txt
 #picken.txt.contains output from git log --oneline
 for S in `tac picken.txt`; do
 	git cherry-pick $(echo "$S" | cut -d' ' -f1)
