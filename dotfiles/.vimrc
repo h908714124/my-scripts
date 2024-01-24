@@ -1,11 +1,10 @@
+set clipboard=unnamedplus
 set background=dark
 syntax on
 set wildmenu
 set wildmode=longest:full,full
 
-au TabLeave * let g:lasttab = tabpagenr()
-nnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
-vnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
+nnoremap <F7> :w !diff % -<CR>
 
 nnoremap <C-Left> :tabprevious<CR>
 nnoremap <C-Right> :tabnext<CR>
