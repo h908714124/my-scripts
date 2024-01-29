@@ -1,3 +1,4 @@
+autocmd Filetype sh setlocal tabstop=4
 set clipboard=unnamedplus
 set background=dark
 syntax on
