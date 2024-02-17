@@ -16,7 +16,7 @@ set switchbuf=usetab
 nnoremap <F8> :sbnext<CR>
 nnoremap <S-F8> :sbprevious<CR>
 
-#https://github.com/ctrlpvim/ctrlp.vim
+"https://github.com/ctrlpvim/ctrlp.vim
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_cmd = 'CtrlPMRU'
 
