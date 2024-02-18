@@ -8,5 +8,5 @@ set wildmode=longest:full,full
 
 "https://github.com/ctrlpvim/ctrlp.vim
 let g:ctrlp_map='<c-p>'
-let g:ctrlp_cmd = 'CtrlPMRU'
+let g:ctrlp_cmd = 'CtrlPBuffer'
 
