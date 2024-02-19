@@ -4,6 +4,7 @@ set background=dark
 syntax on
 set wildmenu
 set wildmode=longest:full,full
+set cursorline
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
