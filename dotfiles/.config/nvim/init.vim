@@ -1,9 +1,9 @@
-set hidden
+call plug#begin()
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.5' }
+call plug#end()
+
 set tabstop=4
-set background=dark
-syntax on
-set wildmenu
-set wildmode=longest:full,full
 set cursorline
 
 nnoremap <up> <nop>
@@ -21,6 +21,6 @@ inoremap <PageUp> <nop>
 inoremap <PageDown> <nop>
 
 "https://github.com/ctrlpvim/ctrlp.vim
-let g:ctrlp_map='<c-p>'
-let g:ctrlp_cmd = 'CtrlPBuffer'
+"let g:ctrlp_map='<c-p>'
+"let g:ctrlp_cmd = 'CtrlPBuffer'
 
