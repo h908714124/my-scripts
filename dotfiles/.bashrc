@@ -7,6 +7,10 @@ if [[ -f ~/.git-prompt.sh ]]; then
   . ~/.git-prompt.sh
 fi
 
+__path () {
+    [[ ":$PATH:" != *":${1}:"* ]] && PATH="${1}:${PATH}"
+}
+
 LC_ALL=en_US.UTF-8
 LANG=en_US.UTF-8
 LANGUAGE=en_US.UTF-8
