@@ -1,0 +1,30 @@
+#!/bin/bash
+
+join_strings () { 
+  local IFS="|"; 
+  echo "$*"; 
+}
+
+check_gaps () {
+  local MAX=$(ls -1 *.ts | grep -E ^\\d | awk 'function max(a,b){if(a>b){return a}else{return b}}BEGIN{FS=".";m=0}{m=max(m,$1)}END{print m}')
+  for S in $(seq 0 $MAX); do
+    if [[ ! -f ${S}.ts ]]; then
+      echo "Missing: $S"
+      exit 1
+    fi
+  done
+}
+
+merge_chunks () {
+  declare -a local FILES
+  local INDEX=0
+
+  for S in $(ls -1 *.ts | grep -E ^\\d | awk 'BEGIN {FS="."} {printf("%06d\t%s\n",$1,$0)}' | sort | cut -f2); do
+    FILES[INDEX]=$S
+    INDEX=$(( INDEX + 1 ))
+  done
+
+  local JOINED=$(join_strings ${FILES[@]})
+  ffmpeg -y -i "concat:$JOINED" -c copy ${1}.mp4
+}
+
