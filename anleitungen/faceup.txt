@@ -1,1 +1,1 @@
-fgrep 'E/nsHttp uri=https://3zbd227pd3.a.trbcdn.net' /var/folders/sl/049b55r128qcf235gyh_w4380000gn/T/log.txt-main.625.moz_log | grep -oe 'uri=.*$' | cut -d= -f2- | sort -u >L01.txt
+fgrep -E 'E/nsHttp uri=.*\d+[.]ts' /var/folders/sl/049b55r128qcf235gyh_w4380000gn/T/log.txt-main.625.moz_log | grep -oE 'uri=.*$' | cut -d= -f2- | sort -u > L01.txt

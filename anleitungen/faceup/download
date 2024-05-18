@@ -11,14 +11,12 @@ MODULE="${FILE%%.*}"
 dl_chunk() {
 	pushd $PWD
 	cd $MODULE
-	curl "$1" \
+	curl -s "$1" \
 		-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0' \
 		-H 'Accept: */*' \
 		-H 'Accept-Language: en-US,en;q=0.5' \
 		-H 'Accept-Encoding: gzip, deflate, br' \
-		-H 'Origin: https://player02.getcourse.ru' \
 		-H 'Connection: keep-alive' \
-		-H 'Referer: https://player02.getcourse.ru/' \
 		-H 'Sec-Fetch-Dest: empty' \
 		-H 'Sec-Fetch-Mode: cors' \
 		-H 'Sec-Fetch-Site: cross-site' \
@@ -38,7 +36,7 @@ mkdir $MODULE
 while read -r S; do
   echo $S
   dl_chunk "$S"
-  sleep 1
+  sleep 0.5
 done < $FILE
 
 cd $MODULE
