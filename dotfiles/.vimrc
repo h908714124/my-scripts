@@ -6,6 +6,8 @@ set wildmenu
 set wildmode=longest:full,full
 set cursorline
 
+command W update
+
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -22,5 +24,5 @@ inoremap <PageDown> <nop>
 
 "https://github.com/ctrlpvim/ctrlp.vim
 let g:ctrlp_map='<c-p>'
-let g:ctrlp_cmd = 'CtrlPBuffer'
+let g:ctrlp_cmd='CtrlPBuffer'
 
