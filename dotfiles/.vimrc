@@ -7,6 +7,7 @@ set wildmode=longest:full,full
 set cursorline
 
 nnoremap <c-s> :update
+vnoremap <c-d> v<c-c>P
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
