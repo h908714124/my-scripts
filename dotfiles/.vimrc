@@ -6,7 +6,7 @@ set wildmenu
 set wildmode=longest:full,full
 set cursorline
 
-command W update
+nnoremap <c-s> :update
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
