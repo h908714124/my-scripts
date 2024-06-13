@@ -6,6 +6,9 @@ set wildmenu
 set wildmode=longest:full,full
 set cursorline
 
+set laststatus=2
+set statusline=%f
+
 nnoremap <c-s> :update
 vnoremap <c-d> v<c-c>P
 
