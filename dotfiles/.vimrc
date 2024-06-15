@@ -10,7 +10,7 @@ set laststatus=2
 set statusline=%f
 
 nnoremap <c-s> :update
-vnoremap <c-d> v<c-c>P
+inoremap <c-s> <c-c>:update
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
