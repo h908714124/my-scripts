@@ -5,6 +5,7 @@ syntax on
 set wildmenu
 set wildmode=longest:full,full
 set cursorline
+set ruler
 
 set laststatus=2
 set statusline=%f
