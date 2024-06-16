@@ -8,7 +8,12 @@ set cursorline
 set ruler
 
 set laststatus=2
-set statusline=%f
+set statusline=
+set statusline=+%t      "tail of filename
+set statusline+=%m      "modified flag
+set statusline+=%=      "left/right separator
+set statusline+=%l/%L   "cursor line/total lines
+set statusline+=\ %P    "percent through file
 
 nnoremap <c-s> :update
 inoremap <c-s> <c-c>:update
