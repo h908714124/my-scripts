@@ -4,7 +4,7 @@ set background=dark
 syntax on
 set wildmenu
 set wildmode=longest:full,full
-set cursorline
+"set cursorline
 set ruler
 
 set laststatus=2
@@ -36,3 +36,6 @@ inoremap <PageDown> <nop>
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_cmd='CtrlPBuffer'
 
+set updatetime=2000
+set signcolumn=yes
+set nofileignorecase
