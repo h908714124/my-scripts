@@ -36,7 +36,8 @@ inoremap <PageDown> <nop>
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_cmd='CtrlPBuffer'
 
-set updatetime=2000
+"https://github.com/airblade/vim-gitgutter
+set updatetime=1000
 set nofileignorecase
 set signcolumn=number
 
