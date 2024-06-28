@@ -1,11 +1,15 @@
 set hidden
-set tabstop=4
 set background=dark
 syntax on
 set wildmenu
 set wildmode=longest:full,full
 "set cursorline
 set ruler
+set hlsearch
+set autoindent
+set expandtab
+set tabstop=2
+set shiftwidth=2
 
 set laststatus=2
 set statusline=
