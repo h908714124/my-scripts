@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in $(seq 1 8); do
+	for S in $(find src/ -type f); do
+		sed -i -E "s/^([ ]*)\t/\1  /" $S
+	done
+done
