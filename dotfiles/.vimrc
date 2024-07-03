@@ -18,6 +18,7 @@ set statusline+=%m      "modified flag
 set statusline+=%=      "left/right separator
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
+set nostartofline
 
 nnoremap <c-s> :update
 inoremap <c-s> <c-c>:update
