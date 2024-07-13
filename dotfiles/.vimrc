@@ -45,6 +45,7 @@ inoremap <PageDown> <nop>
 set runtimepath^=~/.vim/plugins/start/ctrlp
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_cmd='CtrlPBuffer'
+let g:ctrlp_by_filename=1
 
 set updatetime=1000
 set nofileignorecase
