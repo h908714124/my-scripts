@@ -9,16 +9,15 @@
 [merge]
 	tool = meld
 [rerere]
-        enabled = true
+  enabled = true
 [credential]
-        helper = cache --timeout=3600
+  helper = cache --timeout=3600
 [core]
-        pager = less -F -X
+  pager = less -F -X
 	longpaths = true
 [pull]
-        ff = only
-#	rebase = true
+  ff = only
 #[http]
-#	proxy = my-proxy.com:8080
-#       sslVerify = false
+#  proxy = my-proxy.com:8080
+#  sslVerify = false
 
