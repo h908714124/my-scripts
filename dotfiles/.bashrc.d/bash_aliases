@@ -28,4 +28,5 @@ alias videos='cd ~/Videos'
 alias pictures='cd ~/Pictures'
 alias downloads='cd ~/Downloads'
 alias cherrypick='git cherry-pick'
-
+alias grep='ugrep'
+alias fgrep='ugrep -F'
