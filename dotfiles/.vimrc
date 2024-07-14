@@ -20,8 +20,8 @@ set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 set nostartofline
 
-nnoremap <c-s> :update
-inoremap <c-s> <c-c>:update
+nnoremap <c-s> :update<CR>
+inoremap <c-s> <c-c>:update<CR>
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
