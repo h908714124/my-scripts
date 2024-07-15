@@ -35,5 +35,5 @@ export LIBVIRT_DEFAULT_URI=qemu:///system
 HISTSIZE=10000
 HISTFILESIZE=10000
 
-eval $(keychain --systemd --agents gpg,ssh --eval)
+eval $(keychain --agents gpg,ssh --eval)
 
