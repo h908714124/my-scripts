@@ -37,3 +37,16 @@ HISTFILESIZE=10000
 
 eval $(keychain --agents gpg,ssh --eval)
 
+
+PATH=${PATH}:${HOME}/sw/node/bin
+PATH=${PATH}:${HOME}/sw/jdk/bin
+
+export JAVA_HOME=${HOME}/sw/jdk
+
+caffeinate() {
+  if [[ -z "$1" ]]; then
+    echo "arg: seconds"
+    return 1
+  fi
+  systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep $1
+}
