@@ -3,20 +3,19 @@
 	co = checkout
 	ci = commit
 	br = branch --sort=committerdate
+	merge = merge --ff-only
 [user]
 	name = jbock
 	email = jbock-java@gmx.de
 [merge]
 	tool = meld
-[rerere]
-  enabled = true
 [credential]
-  helper = cache --timeout=3600
+	helper = cache --timeout=3600
 [core]
-  pager = less -F -X
+	pager = less -F -X
 	longpaths = true
 [pull]
-  ff = only
+	ff = only
 #[http]
 #  proxy = my-proxy.com:8080
 #  sslVerify = false
