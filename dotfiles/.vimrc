@@ -42,6 +42,7 @@ inoremap <PageDown> <nop>
 "vim -u NONE -c \"helptags ~/.vim/pack/plugins/start/ctrlp/doc\" -c q
 "git clone https://github.com/airblade/vim-gitgutter.git ~/.vim/pack/plugins/start/vim-gitgutter
 "vim -u NONE -c \"helptags ~/.vim/pack/plugins/start/vim-gitgutter\" -c q
+"git clone https://github.com/unblevable/quick-scope ~/.vim/pack/plugins/start/quick-scope
 set runtimepath^=~/.vim/plugins/start/ctrlp
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_cmd='CtrlPBuffer'
@@ -56,6 +57,8 @@ highlight! link SignColumn LineNr
 highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 "jump to last known cursor position when opening
 if has("autocmd")
