@@ -50,3 +50,7 @@ caffeinate() {
   fi
   systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep $1
 }
+
+randpw() {
+  tr -dc '_+=!?/ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz1-9' </dev/urandom | head -c 14 ; echo
+}
