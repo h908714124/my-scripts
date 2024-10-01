@@ -51,6 +51,8 @@ caffeinate() {
   systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep $1
 }
 
+export LIBVIRT_DEFAULT_URI=qemu:///system
+
 randpw() {
   tr -dc '_+=!?/ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz1-9' </dev/urandom | head -c 14 ; echo
 }
