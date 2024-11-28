@@ -1,0 +1,14 @@
+#!ipxe
+
+:retry
+menu Herzlich Willkommen
+item fedora-41     Fedora 41
+choose auswahl || goto cancelled
+goto ${auswahl} ||
+
+chain http://{http-server}/ipxe/{auswahl}.ipxe
+
+:cancelled
+echo cancel
+sleep 3
+reboot

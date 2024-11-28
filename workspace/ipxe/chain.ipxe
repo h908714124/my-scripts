@@ -1,0 +1,6 @@
+#!ipxe
+dhcp
+set http-server ...
+chain http://${http-server}/ipxe/master.ipxe ||
+sleep 5
+reboot
