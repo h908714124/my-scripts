@@ -51,6 +51,22 @@ caffeinate() {
   systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep $1
 }
 
+vtkeys() {
+  local MODEL=$(localectl | sed -nE 's/^\s*X11 Model:\s*(\w+)$/\1/p')
+  if [[ ${1:-us} = us ]]; then
+    localectl set-locale en_US.UTF-8
+    localectl --no-convert set-keymap us
+    localectl --no-convert set-x11-keymap de ${MODEL:-pc105} us
+  else
+    localectl set-locale de_DE.UTF-8
+    localectl set-x11-keymap de ${MODEL:-pc105}
+  fi
+}
+
+vtkeys_no_systemd() {
+  loadkeys /usr/lib/kbd/keymaps/xkb/${1:-us}.map.gz
+}
+
 export LIBVIRT_DEFAULT_URI=qemu:///system
 
 randpw() {
