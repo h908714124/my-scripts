@@ -5,5 +5,5 @@ if [[ ! -z `mount | fgrep RAM` ]]; then
   exit 	
 fi
 
-diskutil erasevolume HFS+ 'RAM Disk' `hdiutil attach -nobrowse -nomount ram://4096`
+diskutil erasevolume HFS+ 'RAM Disk' `hdiutil attach -nobrowse -nomount ram://64`
 mount | fgrep RAM
