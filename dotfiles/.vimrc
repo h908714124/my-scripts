@@ -1,3 +1,4 @@
+let mapleader=" "
 set hidden
 set background=dark
 syntax on
@@ -10,6 +11,7 @@ set autoindent
 set expandtab
 set tabstop=2
 set shiftwidth=2
+set noincsearch
 
 set laststatus=2
 set statusline=
@@ -20,6 +22,10 @@ set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 set nostartofline
 
+set showcmd
+set timeout timeoutlen=400
+
+nnoremap <leader>h :noh<CR>
 nnoremap <c-s> :update<CR>
 inoremap <c-s> <c-c>:update<CR>
 
@@ -54,7 +60,7 @@ set nofileignorecase
 set signcolumn=number
 let g:gitgutter_set_sign_backgrounds=1
 highlight! link SignColumn LineNr
-highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterAdd guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 
