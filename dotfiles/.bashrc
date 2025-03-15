@@ -36,13 +36,7 @@ export LIBVIRT_DEFAULT_URI=qemu:///system
 HISTSIZE=10000
 HISTFILESIZE=10000
 
-eval $(keychain --agents gpg,ssh --eval)
-
-
-PATH=${PATH}:${HOME}/sw/node/bin
-PATH=${PATH}:${HOME}/sw/jdk/bin
-
-export JAVA_HOME=${HOME}/sw/jdk
+type keychain 2> /dev/null && eval $(keychain --agents gpg,ssh --eval)
 
 caffeinate() {
   if [[ -z "$1" ]]; then
