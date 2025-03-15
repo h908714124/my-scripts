@@ -1,0 +1,10 @@
+GRUB_TIMEOUT=5
+GRUB_TIMEOUT_STYLE=menu
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console serial"
+GRUB_TERMINAL_INPUT="console serial"
+GRUB_SERIAL_COMMAND="serial"
+GRUB_CMDLINE_LINUX="rhgb quiet"
+GRUB_DISABLE_RECOVERY="false"
