@@ -1,9 +1,9 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
-if [[ ! -z `mount | fgrep RAM` ]]; then
-  mount | fgrep RAM
+[[ $(mount | grep -F RAM) ]] && {
+  mount | grep -F RAM
   exit 	
-fi
+}
 
-diskutil erasevolume HFS+ 'RAM Disk' `hdiutil attach -nobrowse -nomount ram://64`
-mount | fgrep RAM
+diskutil erasevolume HFS+ 'RAM Disk' $(hdiutil attach -nobrowse -nomount ram://2048)
+mount | grep -F RAM
