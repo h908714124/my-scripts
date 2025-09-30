@@ -1,22 +1,19 @@
 #!/bin/bash
 set -e
 
-if [[ "0" == `id -u` ]]; then
+[[ $EUID = "0" ]] && {
   echo "ERROR do not run this as root"
   exit 1
-fi
+}
 
-if [[ ! -z `mount | fgrep /mnt/ramdisk` ]]; then
-  mount | fgrep /mnt/ramdisk
-  exit 	
-fi
+[[ $(mount | grep -q -F /mnt/ramdisk) ]] && {
+  mount | grep -F /mnt/ramdisk
+  exit 0
+}
 
-if [[ ! -d /mnt/ramdisk ]]; then
+[[ -d /mnt/ramdisk ]] || {
   sudo mkdir /mnt/ramdisk
-fi
+}
 
 sudo mount -t ramfs -o size=64M ramfs /mnt/ramdisk
-OLD_USER=$USER
-sudo chown -R ${OLD_USER}: /mnt/ramdisk/
-mount | fgrep /mnt/ramdisk
-
+sudo chown -R $USER: /mnt/ramdisk/
