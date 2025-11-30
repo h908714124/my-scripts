@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -s -L https://fedoraproject.org/releases.json | jq -r '[.[].version|select(test("^[0-9]+$"))]|max'
