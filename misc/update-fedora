@@ -1,7 +1,11 @@
 #!/bin/bash
 
+assume_yes=false
+read_command="read -p"
+
 target_release() {
-  curl -s "https://fedoraproject.org/releases.json" | jq -r '[.[].version]|max'
+  local arch=$(uname -m)
+  curl -s "https://fedoraproject.org/releases.json" | jq -r ".[]|select(.arch==\"$arch\")|.version" | sort -rn | head -1
 }
 
 is_update_prepared() {
@@ -22,29 +26,29 @@ system_update() {
   local target=$1
   local REPLY
   dnf -y system-upgrade download --releasever=$target && {
-    read -p "The system update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && dnf -y offline reboot
+    $read_command "The system update is prepared. Would you like to reboot right now? [y/N] "
+    if $assume_yes || [[ $REPLY =~ [yY] ]]; then dnf -y offline reboot; fi
   }
 }
 
-regular_update() {
+normal_update() {
   local REPLY
   dnf -y update --refresh --offline && {
-    read -p "The update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && dnf -y offline reboot
+    $read_command "The update is prepared. Would you like to reboot right now? [y/N] "
+    if $assume_yes || [[ $REPLY =~ [yY] ]]; then dnf -y offline reboot; fi
   }
 }
 
 default_action() {
   local REPLY
   is_update_prepared && {
-    read -p "An update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && dnf -y offline reboot
+    $read_command "An update is prepared. Would you like to reboot right now? [y/N] "
+    if $assume_yes || [[ $REPLY =~ [yY] ]]; then dnf -y offline reboot; fi
     return 0
   }
   check_updates_available && {
-    read -p "An update ist available. Would you like to download it now? [y/N] "
-    [[ $REPLY =~ [Yy] ]] && regular_update
+    $read_command "An update ist available. Would you like to download it now? [y/N] "
+    if $assume_yes || [[ $REPLY =~ [yY] ]]; then normal_update; fi
     return 0
   }
   local current=$(current_release)
@@ -52,8 +56,8 @@ default_action() {
   if (( current == target )); then
     echo "The system is up-to-date."
   elif (( target - current == 1 )); then
-    read -p "A system update to fedora $target is available. Would you like to download it now? [y/N] "
-    [[ $REPLY =~ [Yy] ]] && system_update $target
+    $read_command "A system update to fedora $target is available. Would you like to download it now? [y/N] "
+    if $assume_yes || [[ $REPLY =~ [yY] ]]; then system_update $target; fi
     return 0
   else
     echo "The system is too far behind. Please update manually."
@@ -64,6 +68,10 @@ return 2> /dev/null || {
   [[ $EUID = "0" ]] || {
     echo "run as root"
     exit 1
+  }
+  [[ $1 = "-y" ]] && {
+    assume_yes=true
+    read_command=echo
   }
   default_action
 }
