@@ -13,9 +13,7 @@ is_update_prepared() {
 }
 
 check_updates_available() {
-  dnf check-update
-  local n=$(dnf updateinfo summary 2>&1 | sed -n -E 's/.*([0-9]+)$/\1/p' | paste -sd+ | bc)
-  (( n > 0 ))
+  [[ $(dnf check-update --refresh 2> /dev/null) ]]
 }
 
 current_release() {
