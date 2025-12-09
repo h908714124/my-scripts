@@ -1,7 +1,5 @@
 #!/bin/bash
 
-read_p="read -p"
-
 read_yes() {
   echo "$@"
   echo "y"
@@ -49,6 +47,7 @@ normal_update() {
 }
 
 default_action() {
+  read_p="read -p"
   [[ $1 = "-y" ]] && read_p=read_yes
   is_update_prepared && {
     $read_p "An update is prepared. Would you like to reboot right now? [y/N] "
@@ -79,6 +78,6 @@ return 2> /dev/null || {
       echo -e "\033[1;31m[ERROR]\033[0m insufficient privileges"
       exit 1
     }
-    sudo -s "$0 $@"
+    sudo bash -c "$(declare -f); default_action $@"
   fi
 }
