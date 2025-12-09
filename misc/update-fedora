@@ -49,6 +49,7 @@ normal_update() {
 }
 
 default_action() {
+  [[ $1 = "-y" ]] && read_p=read_yes
   is_update_prepared && {
     $read_p "An update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && dnf -y offline reboot
@@ -71,10 +72,13 @@ default_action() {
 }
 
 return 2> /dev/null || {
-  [[ $EUID = "0" ]] || {
-    echo "run as root"
-    exit 1
-  }
-  [[ $1 = "-y" ]] && read_p=read_yes
-  default_action
+  if [[ $EUID = "0" ]]; then
+    default_action $@
+  else
+    sudo true || {
+      echo -e "\033[1;31m[ERROR]\033[0m insufficient privileges"
+      exit 1
+    }
+    sudo -s "$0 $@"
+  fi
 }
