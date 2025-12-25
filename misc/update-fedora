@@ -17,11 +17,15 @@ os_release() {
 }
 
 target_release() {
+  local current=$(os_release)
+  if [[ $(release_type) != "stable" ]]; then
+    echo $current
+    return 0
+  fi
   local arch=$(uname -m)
   local result=$(curl -s "https://fedoraproject.org/releases.json" |\
     jq -r ".[]|select( .arch == \"$arch\") |.version" |\
     sort -rn | head -1)
-  local current=$(os_release)
   if (( result >= current )); then
     echo $result
   else
