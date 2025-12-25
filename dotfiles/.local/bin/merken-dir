@@ -1,0 +1,19 @@
+#!/bin/bash
+# Creates an alias to quickly change to the current directory.
+
+[[ $1 ]] || {
+  echo "Usage: $(basename $0) <alias>"
+  exit 1
+}
+
+[[ -a ~/.bashrc.d/aliases.sh ]] || {
+  mkdir -p ~/.bashrc.d
+  touch ~/.bashrc.d/aliases.sh
+}
+
+#
+# if the new alias already exists, comment it out
+sed -i "s/^alias ${1}=/#&/" ~/.bashrc.d/aliases.sh
+
+# append the new alias
+echo "alias ${1}='cd $(pwd)'" | tee -a ~/.bashrc.d/aliases.sh
