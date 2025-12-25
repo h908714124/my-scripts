@@ -1,22 +1,27 @@
 [alias]
-	st = status
-	co = checkout
-	ci = commit
-	br = branch --sort=committerdate
-	merge = merge --ff-only
-[user]
-	name = jbock
-	email = jbock-java@gmx.de
-[merge]
-	tool = meld
-[credential]
-	helper = cache --timeout=3600
+  co = checkout
+  br = branch --sort=committerdate
+  ci = commit
+  st = status
 [core]
-	pager = less -F -X
-	longpaths = true
+  editor = vim
+  pager = less -F -X
+[credential]
+  helper = cache --timeout=3600
 [pull]
-	ff = only
-#[http]
-#  proxy = my-proxy.com:8080
-#  sslVerify = false
-
+  ff = only
+[user]
+  # name = Full Name
+  # email = email@address.com
+  # signingkey = 0000000000000000000000000000000000000000
+[merge]
+  # tool = meld
+[http]
+  # proxy = http://aa.bb.cc:8080
+[commit]
+  # gpgsign = true
+[init]
+  defaultBranch = main
+[user]
+  name = jbock
+  email = jbock-java@gmx.de

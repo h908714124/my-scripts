@@ -1,9 +1,15 @@
 #!/bin/bash
 
+assume_yes=false
+
 read_yes() {
   echo "$@"
   echo "y"
   REPLY=y
+}
+
+release_type() {
+  sed -n -E 's/^RELEASE_TYPE=(\S+)/\1/p' /etc/os-release
 }
 
 os_release() {
@@ -24,34 +30,37 @@ target_release() {
 }
 
 is_update_prepared() {
-  dnf offline status | grep -F -q "offline reboot"
+  sudo dnf offline status | grep -F -q "offline reboot"
 }
 
 check_updates_available() {
-  [[ $(dnf check-update --refresh 2> /dev/null) ]]
+  [[ $(sudo dnf check-update --refresh 2> /dev/null) ]]
 }
 
 system_update() {
   local target=$1
-  dnf -y system-upgrade download --releasever=$target && {
+  sudo dnf -y system-upgrade download --releasever=$target && {
     $read_p "The system update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && dnf -y offline reboot
+    [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
   }
 }
 
 normal_update() {
-  dnf -y update --refresh --offline && {
+  sudo dnf -y update --refresh --offline && {
     $read_p "The update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && dnf -y offline reboot
+    [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
   }
 }
 
 default_action() {
   read_p="read -p"
-  [[ $1 = "-y" ]] && read_p=read_yes
+  [[ $1 = "-y" ]] && {
+    read_p=read_yes
+    assume_yes=true
+  }
   is_update_prepared && {
     $read_p "An update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && dnf -y offline reboot
+    [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
     return 0
   }
   check_updates_available && {
@@ -63,6 +72,10 @@ default_action() {
   local target=$(target_release)
   if (( current == target )); then
     echo "The system is up-to-date."
+    if ! $assume_yes && [[ $(release_type) = "stable" ]]; then
+      read -p "Would you like to upgrade to rawhide? [y/N] "
+      [[ $REPLY =~ [yY] ]] && system_update rawhide
+    fi
   else
     $read_p "A system update to fedora $(( current + 1 )) is available. Would you like to download it now? [y/N] "
     [[ $REPLY =~ [yY] ]] && system_update $(( current + 1 ))
@@ -71,13 +84,5 @@ default_action() {
 }
 
 return 2> /dev/null || {
-  if [[ $EUID = "0" ]]; then
-    default_action $@
-  else
-    sudo true || {
-      echo -e "\033[1;31m[ERROR]\033[0m insufficient privileges"
-      exit 1
-    }
-    sudo bash -c "$(declare -f); default_action $@"
-  fi
+  default_action $@
 }
