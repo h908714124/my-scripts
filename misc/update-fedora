@@ -64,8 +64,8 @@ default_action() {
   if (( current == target )); then
     echo "The system is up-to-date."
   else
-    $read_p "A system update to fedora $(( target + 1 )) is available. Would you like to download it now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && system_update $(( target + 1 ))
+    $read_p "A system update to fedora $(( current + 1 )) is available. Would you like to download it now? [y/N] "
+    [[ $REPLY =~ [yY] ]] && system_update $(( current + 1 ))
   fi
   return 0
 }
