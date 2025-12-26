@@ -17,15 +17,24 @@ os_release() {
 }
 
 target_release() {
+  local result
   local current=$(os_release)
   if [[ $(release_type) != "stable" ]]; then
     echo $current
     return 0
   fi
-  local arch=$(uname -m)
-  local result=$(curl -s "https://fedoraproject.org/releases.json" |\
-    jq -r ".[]|select( .arch == \"$arch\") |.version" |\
-    sort -rn | head -1)
+  local metainfo=/usr/share/metainfo/org.fedoraproject.fedora.metainfo.xml
+  if [[ -f $metainfo ]]; then
+    result=$(xmllint --xpath "/component/releases//release[@type='stable']/@version" $metainfo | \
+      sed -n -E 's/.*[=]["]([0-9]+)["].*/\1/p' | \
+      sort -rn | \
+      head -1)
+  else
+    result=$(curl -s "https://fedoraproject.org/releases.json" | \
+      jq -r ".[]|select( .arch == \"$(uname -m)\") |.version" | \
+      sort -rn | \
+      head -1)
+  fi
   if (( result >= current )); then
     echo $result
   else
@@ -77,19 +86,30 @@ default_action() {
   }
   check_updates_available && {
     while true; do
-      $read_p "An update is available. Show / download / apply / nothing? [s/d/a/n] "
-      [[ $REPLY = "s" ]] && {
-        update_show
-      }
-      [[ $REPLY = "d" ]] && {
-        update_download
-        return 0
-      }
-      [[ $REPLY = "a" ]] && {
-        update_apply
-        return 0
-      }
-      [[ $REPLY = "n" ]] && return 0
+      $read_p "An update is available. [s]how [d]ownload [a]pply [q]uit [h]elp ? "
+      case $REPLY in
+        s)
+          update_show
+          ;;
+        d)
+          update_download
+          return 0
+          ;;
+        a)
+          update_apply
+          return 0
+          ;;
+        q)
+          return 0
+          ;;
+        *)
+          echo "s = show available updates"
+          echo "d = download updates for offline update"
+          echo "a = apply updates (no reboot)"
+          echo "q = quit"
+          echo "h = show help"
+          ;;
+      esac
     done
   }
   local current=$(os_release)
