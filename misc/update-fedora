@@ -33,25 +33,33 @@ target_release() {
   fi
 }
 
+update_show() {
+  sudo dnf check-update --refresh
+}
+
 is_update_prepared() {
   sudo dnf offline status | grep -F -q "offline reboot"
 }
 
 check_updates_available() {
-  [[ $(sudo dnf check-update --refresh 2> /dev/null) ]]
+  [[ $(update_show 2> /dev/null) ]]
 }
 
 system_update() {
   local target=$1
   sudo dnf -y system-upgrade download --releasever=$target && {
-    $read_p "The system update is prepared. Would you like to reboot right now? [y/N] "
+    $read_p "A system update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
   }
 }
 
-normal_update() {
+update_apply() {
+  sudo dnf -y update --refresh
+}
+
+update_download() {
   sudo dnf -y update --refresh --offline && {
-    $read_p "The update is prepared. Would you like to reboot right now? [y/N] "
+    $read_p "An update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
   }
 }
@@ -68,9 +76,21 @@ default_action() {
     return 0
   }
   check_updates_available && {
-    $read_p "An update is available. Would you like to download it now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && normal_update
-    return 0
+    while true; do
+      $read_p "An update is available. Show / download / apply / nothing? [s/d/a/n] "
+      [[ $REPLY = "s" ]] && {
+        update_show
+      }
+      [[ $REPLY = "d" ]] && {
+        update_download
+        return 0
+      }
+      [[ $REPLY = "a" ]] && {
+        update_apply
+        return 0
+      }
+      [[ $REPLY = "n" ]] && return 0
+    done
   }
   local current=$(os_release)
   local target=$(target_release)
