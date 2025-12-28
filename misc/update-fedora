@@ -98,12 +98,15 @@ default_action() {
     case $opt in
       y)
         batch_mode=true
+        shift
         ;;
       r)
         suggest_rawhide=true
+        shift
         ;;
       h)
         synopsis
+        shift
         return 0
         ;;
       *)
@@ -133,6 +136,7 @@ default_action() {
     }
     while true; do
       read -n1 -p "An update is available. Press \"h\" for help. [s]how [d]ownload [a]pply [q]uit ? "
+      echo
       case $REPLY in
         s)
           update_show
