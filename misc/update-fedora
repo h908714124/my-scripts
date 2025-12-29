@@ -93,33 +93,33 @@ update_download() {
 }
 
 default_action() {
-  local opt
-  while getopts ":yrh" opt; do
+  local opt options
+  options=$(getopt -o "yrh" -- "$@")
+  (( $? == 0 )) || {
+    synopsis
+    return 1
+  }
+  for opt in $options; do
     case $opt in
-      y)
+      -y)
         batch_mode=true
-        shift
         ;;
-      r)
+      -r)
         suggest_rawhide=true
-        shift
         ;;
-      h)
+      -h)
         synopsis
-        shift
         return 0
         ;;
+      --)
+        ;;
       *)
+        echo "Unknown parameter: $opt"
         synopsis
         return 1
         ;;
     esac
   done
-  (( $# == 0 )) || {
-    echo "Unknown parameter: $1"
-    synopsis
-    return 1
-  }
   if is_update_prepared; then
     $batch_mode && {
       echo "An update is prepared. Please disable batch mode and try again."
