@@ -21,8 +21,8 @@ synopsis() {
 
 show_interactive_help() {
   echo "  s - show available updates"
-  echo "  d - download updates for offline update"
-  echo "  a - apply updates (no reboot)"
+  echo "  o - prepare offline update"
+  echo "  u - regular update (no reboot)"
   echo "  q - quit"
   echo "  h - help"
 }
@@ -61,16 +61,12 @@ target_release() {
   fi
 }
 
-update_show() {
-  sudo dnf check-update --refresh
-}
-
 is_update_prepared() {
   sudo dnf offline status | grep -F -q "offline reboot"
 }
 
 check_updates_available() {
-  [[ $(update_show 2> /dev/null) ]]
+  [[ $(dnf check-update --refresh 2> /dev/null) ]]
 }
 
 system_update() {
@@ -85,7 +81,7 @@ update_apply() {
   sudo dnf -y update --refresh
 }
 
-update_download() {
+offline_prepare() {
   sudo dnf -y update --refresh --offline && {
     read -p "An update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
@@ -130,29 +126,28 @@ default_action() {
     return 0
   fi
   check_updates_available && {
-    $batch_mode && {
+    if $batch_mode; then
       update_apply
       return 0
-    }
+    fi
     while true; do
-      read -n1 -p "An update is available. Press \"h\" for help. [s]how [d]ownload [a]pply [q]uit ? "
-      echo
+      read -p "An update is available. Press \"h\" for help. [s]how [o]ffline [u]update [q]uit ? "
       case $REPLY in
         s)
-          update_show
+          dnf check-update
           ;;
-        d)
-          update_download
+        o)
+          offline_prepare
           return 0
           ;;
-        a)
+        u)
           update_apply
           return 0
           ;;
         q)
           return 0
           ;;
-        *)
+        h)
           show_interactive_help
           ;;
       esac
