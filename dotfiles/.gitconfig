@@ -25,3 +25,9 @@
 [user]
   name = jbock
   email = jbock-java@gmx.de
+[diff]
+	tool = meld
+[difftool]
+	prompt = false
+[difftool "meld"]
+	cmd = meld "$LOCAL" "$REMOTE"
