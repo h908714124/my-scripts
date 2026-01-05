@@ -9,3 +9,16 @@ sda                                             8:0    0    20G  0 disk
     └─vgroot-home                             252:2    0     1G  0 lvm   /home
 sr0                                            11:0    1 911.7M  0 rom   
 zram0                                         251:0    0   3.8G  0 disk  [SWAP]
+
+/tmp/vbox.txt:
+ignoredisk --only-use=sda
+mount /dev/sda1 /boot/efi
+mount --reformat=ext4 /dev/sda2 /boot
+mount --reformat=ext4 /dev/mapper/vgroot-root /
+mount /dev/mapper/vgroot-home /home
+
+Running pre-installation scripts
+Starting automated install...
+Saving storage configuration...
+Checking storage configuration...
+The existing unlocked LUKS device sda3 cannot be used without an encryption key specified for this device. Please, rescan the storage.
