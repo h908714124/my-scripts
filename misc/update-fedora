@@ -131,7 +131,7 @@ default_action() {
       return 0
     fi
     while true; do
-      read -p "An update is available. Press \"h\" for help. [s]how [o]ffline [u]update [q]uit ? "
+      read -p "An update is available. Press \"h\" for help. [s]how [o]ffline [u]pdate [q]uit ? "
       case $REPLY in
         s)
           dnf check-update
