@@ -130,8 +130,9 @@ default_action() {
       update_apply
       return 0
     fi
+    echo "An update is available. Press \"h\" for help."
     while true; do
-      read -p "An update is available. Press \"h\" for help. [s]how [o]ffline [u]pdate [q]uit ? "
+      read -p "[s]how [o]ffline [u]pdate [c]hangelog [q]uit ? "
       case $REPLY in
         s)
           dnf check-update
@@ -143,6 +144,9 @@ default_action() {
         u)
           update_apply
           return 0
+          ;;
+        c)
+          dnf changelog --upgrades
           ;;
         q)
           return 0
