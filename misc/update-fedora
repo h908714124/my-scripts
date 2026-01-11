@@ -77,7 +77,7 @@ system_update() {
   }
 }
 
-update_apply() {
+update_running() {
   sudo dnf -y update --refresh
 }
 
@@ -127,23 +127,33 @@ default_action() {
   fi
   check_updates_available && {
     if $batch_mode; then
-      update_apply
+      update_running
       return 0
     fi
     echo "An update is available. Press \"h\" for help."
     while true; do
-      read -p "[s]how [o]ffline [u]pdate [c]hangelog [q]uit ? "
+      read -p "[s]how [u]pdate [c]hangelog [q]uit ? "
       case $REPLY in
         s)
           dnf check-update
           ;;
-        o)
-          offline_prepare
-          return 0
-          ;;
         u)
-          update_apply
-          return 0
+          while true; do
+            read -p "[o]ffline [r]unning [b]ack ? "
+            case $REPLY in
+              o)
+                offline_prepare
+                return 0
+                ;;
+              r)
+                update_running
+                return 0
+                ;;
+              b)
+                break
+                ;;
+              esac
+            done
           ;;
         c)
           dnf changelog --upgrades
