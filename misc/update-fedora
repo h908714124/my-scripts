@@ -2,6 +2,30 @@
 
 batch_mode=false
 suggest_rawhide=false
+queue=""
+REPLY=""
+
+pop() {
+  if [[ $queue ]]; then
+    REPLY="${queue:0:1}"
+    queue="${queue:1}"
+  else
+    REPLY=""
+    return 0
+  fi
+}
+
+read_q() {
+  pop
+  if [[ $REPLY ]]; then
+    echo "$1$REPLY"
+    return 0
+  else
+    read -p "$1"
+    queue="$REPLY"
+    pop
+  fi
+}
 
 synopsis() {
   tput bold
@@ -72,7 +96,7 @@ check_updates_available() {
 system_update() {
   local target=$1
   sudo dnf -y system-upgrade download --releasever=$target && {
-    read -p "A system update is prepared. Would you like to reboot right now? [y/N] "
+    read_q "A system update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
   }
 }
@@ -83,7 +107,7 @@ update_running() {
 
 offline_prepare() {
   sudo dnf -y update --refresh --offline && {
-    read -p "An update is prepared. Would you like to reboot right now? [y/N] "
+    read_q "An update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
   }
 }
@@ -121,7 +145,7 @@ default_action() {
       echo "An update is prepared. Please disable batch mode and try again."
       return 1
     }
-    read -p "An update is prepared. Would you like to reboot right now? [y/N] "
+    read_q "An update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
     return 0
   fi
@@ -132,14 +156,14 @@ default_action() {
     fi
     echo "An update is available. Press \"h\" for help."
     while true; do
-      read -p "[s]how [u]pdate [c]hangelog [q]uit ? "
+      read_q "[s]how [u]pdate [c]hangelog [q]uit ? "
       case $REPLY in
         s)
           dnf check-update
           ;;
         u)
           while true; do
-            read -p "[o]ffline [r]unning [b]ack ? "
+            read_q "[o]ffline [r]unning [b]ack ? "
             case $REPLY in
               o)
                 offline_prepare
@@ -176,12 +200,12 @@ default_action() {
   local target=$(target_release)
   if (( current == target )); then
     if $suggest_rawhide && [[ $(release_type) = "stable" ]]; then
-      read -p "Would you like to upgrade to rawhide? [y/N] "
+      read_q "Would you like to upgrade to rawhide? [y/N] "
       [[ $REPLY =~ [yY] ]] && system_update rawhide
     fi
   else
     echo "A system update to fedora $(( current + 1 )) is available."
-    read -p "Would you like to download it now? [y/N] "
+    read_q "Would you like to download it now? [y/N] "
     [[ $REPLY =~ [yY] ]] && system_update $(( current + 1 ))
   fi
   return 0
