@@ -1,7 +1,5 @@
 #!/bin/bash
 
-batch_mode=false
-suggest_rawhide=false
 queue=""
 REPLY=""
 
@@ -31,24 +29,27 @@ synopsis() {
   tput bold
   echo "USAGE"
   tput sgr0
-  echo "       update-fedora [-y] [-r]"
+  echo "       update-fedora [batch_commands]"
   echo
   tput bold
-  echo "OPTIONS"
+  echo "EXAMPLES"
   tput sgr0
-  echo "       -y"
-  echo "              Batch mode. Never reboot the system."
-  echo "              Never check for system upgrades."
-  echo "       -r"
-  echo "              Suggest rawhide if applicable."
-}
-
-show_interactive_help() {
-  echo "  s - show available updates"
-  echo "  o - prepare offline update"
-  echo "  u - regular update (no reboot)"
-  echo "  q - quit"
-  echo "  h - help"
+  echo "       update-fedora"
+  echo "              When there is no parameter, the program starts in interactive mode."
+  echo "       update-fedora uoy"
+  echo "              Batch mode: perform commands 'u'(pdate), 'o'(ffline) and 'y'(es) in sequence."
+  echo "              Warning! If any updates are available,"
+  echo "              this will perform an offline update and reboot your computer."
+  echo "       update-fedora uoy"
+  echo "              Batch mode: perform commands 'u'(pdate), 'o'(ffline) and 'y'(es) in sequence."
+  echo "              Warning! If any updates are available,"
+  echo "              this will perform an offline update and reboot your computer."
+  echo "       update-fedora sq"
+  echo "              Batch mode: perform commands 's'(how) and 'q'(uit) in sequence."
+  echo "              Show available updates, then quit."
+  echo "       update-fedora cq"
+  echo "              Batch mode: perform commands 'c'(hangelog) and 'q'(uit) in sequence."
+  echo "              If updates are available, show the changelog, then quit."
 }
 
 release_type() {
@@ -60,8 +61,8 @@ os_release() {
 }
 
 target_release() {
-  local result
-  local current=$(os_release)
+  local current result
+  current=$(os_release)
   if [[ $(release_type) != "stable" ]]; then
     echo $current
     return 0
@@ -94,8 +95,7 @@ check_updates_available() {
 }
 
 system_update() {
-  local target=$1
-  sudo dnf -y system-upgrade download --releasever=$target && {
+  sudo dnf -y system-upgrade download --releasever=$1 && {
     read_q "A system update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
   }
@@ -105,7 +105,7 @@ update_running() {
   sudo dnf -y update --refresh
 }
 
-offline_prepare() {
+update_offline() {
   sudo dnf -y update --refresh --offline && {
     read_q "An update is prepared. Would you like to reboot right now? [y/N] "
     [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
@@ -114,47 +114,54 @@ offline_prepare() {
 
 default_action() {
   local opt options
-  options=$(getopt -o "yrh" -- "$@")
+  options=$(getopt -o "h" -l "help" -- "$@")
   (( $? == 0 )) || {
     synopsis
     return 1
   }
   for opt in $options; do
-    case $opt in
-      -y)
-        batch_mode=true
-        ;;
-      -r)
-        suggest_rawhide=true
-        ;;
-      -h)
+    case "$opt" in
+      -h | --help)
         synopsis
         return 0
         ;;
       --)
         ;;
       *)
-        echo "Unknown parameter: $opt"
-        synopsis
-        return 1
+        [[ $queue ]] && {
+          synopsis
+          return 1
+        }
+        queue="$opt"
         ;;
     esac
   done
   if is_update_prepared; then
-    $batch_mode && {
-      echo "An update is prepared. Please disable batch mode and try again."
-      return 1
-    }
-    read_q "An update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
-    return 0
+    echo "An offline-update is prepared."
+    if [[ $queue = *\|* ]]; then
+      queue="${queue#*|}"
+    else
+      queue=""
+    fi
+    while true; do
+      read_q "[r]eboot [c]lean [q]uit ? "
+      case $REPLY in
+        r)
+          sudo dnf -y offline reboot
+          return 0
+          ;;
+        c)
+          sudo dnf -y offline clean
+          return 0
+          ;;
+        q)
+          return 0
+          ;;
+      esac
+    done
   fi
   check_updates_available && {
-    if $batch_mode; then
-      update_running
-      return 0
-    fi
-    echo "An update is available. Press \"h\" for help."
+    echo "An update is available."
     while true; do
       read_q "[s]how [u]pdate [c]hangelog [q]uit ? "
       case $REPLY in
@@ -163,10 +170,13 @@ default_action() {
           ;;
         u)
           while true; do
-            read_q "[o]ffline [r]unning [b]ack ? "
+            read_q "[o]ffline [r]unning [q]uit [b]ack ? "
             case $REPLY in
               o)
-                offline_prepare
+                update_offline
+                return 0
+                ;;
+              q)
                 return 0
                 ;;
               r)
@@ -185,25 +195,20 @@ default_action() {
         q)
           return 0
           ;;
-        h)
-          show_interactive_help
-          ;;
       esac
     done
   }
+  queue=""
   echo "The system is up-to-date."
-  $batch_mode && {
-    echo "Disable batch mode to check for system updates."
-    return 0
-  }
-  local current=$(os_release)
-  local target=$(target_release)
+  local current target
+  current=$(os_release)
+  target=$(target_release)
   if (( current == target )); then
-    if $suggest_rawhide && [[ $(release_type) = "stable" ]]; then
+    [[ $(release_type) = "stable" ]] && {
       read_q "Would you like to upgrade to rawhide? [y/N] "
       [[ $REPLY =~ [yY] ]] && system_update rawhide
-    fi
-  else
+    }
+  elif (( current < target )); then
     echo "A system update to fedora $(( current + 1 )) is available."
     read_q "Would you like to download it now? [y/N] "
     [[ $REPLY =~ [yY] ]] && system_update $(( current + 1 ))
