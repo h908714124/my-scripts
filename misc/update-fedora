@@ -105,11 +105,29 @@ update_running() {
   sudo dnf -y update --refresh
 }
 
+submenu_update_prepared() {
+  echo "An offline-update is prepared."
+  while true; do
+    read_q "[r]eboot [c]lean [q]uit ? "
+    case $REPLY in
+      r)
+        sudo dnf -y offline reboot
+        return 0
+        ;;
+      c)
+        sudo dnf -y offline clean
+        return 0
+        ;;
+      q)
+        return 0
+        ;;
+    esac
+  done
+}
+
 update_offline() {
-  sudo dnf -y update --refresh --offline && {
-    read_q "An update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
-  }
+  sudo dnf -y update --refresh --offline || return 1
+  submenu_update_prepared
 }
 
 default_action() {
@@ -137,28 +155,13 @@ default_action() {
     esac
   done
   if is_update_prepared; then
-    echo "An offline-update is prepared."
     if [[ $queue = *\|* ]]; then
       queue="${queue#*|}"
     else
       queue=""
     fi
-    while true; do
-      read_q "[r]eboot [c]lean [q]uit ? "
-      case $REPLY in
-        r)
-          sudo dnf -y offline reboot
-          return 0
-          ;;
-        c)
-          sudo dnf -y offline clean
-          return 0
-          ;;
-        q)
-          return 0
-          ;;
-      esac
-    done
+    submenu_update_prepared
+    return 0
   fi
   check_updates_available && {
     echo "An update is available."
