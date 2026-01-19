@@ -132,7 +132,7 @@ update_offline() {
 
 default_action() {
   local opt options
-  options=$(getopt -o "h" -l "help" -- "$@")
+  options=$(getopt -u -o "h" -l "help" -- "$@")
   (( $? == 0 )) || {
     synopsis
     return 1
@@ -155,13 +155,15 @@ default_action() {
     esac
   done
   if is_update_prepared; then
-    if [[ $queue = *\|* ]]; then
-      queue="${queue#*|}"
+    if [[ $queue = *:* ]]; then
+      queue="${queue#*:}"
     else
       queue=""
     fi
     submenu_update_prepared
     return 0
+  elif [[ $queue = *:* ]]; then
+    queue=${queue%:*}
   fi
   check_updates_available && {
     echo "An update is available."
