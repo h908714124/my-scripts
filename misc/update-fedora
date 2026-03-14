@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+#https://github.com/h908714124/my-scripts/blob/master/misc/update-fedora
 
 queue=""
 REPLY=""
