@@ -129,8 +129,11 @@ update_offline() {
 }
 
 default_action() {
-  local opt options
-  options=$(getopt -u -o "h" -l "help" -- "$@")
+  local opt options rawhide
+  options=$(getopt -u -o "h" \
+    -l "help" \
+    -l "rawhide" \
+    -- "$@")
   (( $? == 0 )) || {
     synopsis
     return 1
@@ -141,14 +144,19 @@ default_action() {
         synopsis
         return 0
         ;;
+      --rawhide)
+        rawhide=1
+        ;;
       --)
         ;;
       *)
-        [[ $queue ]] && {
+        if [[ -z $queue ]]; then
+          queue="$opt"
+        else
+          echo "batch commands must be grouped"
           synopsis
           return 1
-        }
-        queue="$opt"
+        fi
         ;;
     esac
   done
@@ -207,10 +215,10 @@ default_action() {
   current=$(os_release)
   target=$(target_release)
   if (( current == target )); then
-    [[ $(release_type) = "stable" ]] && {
+    if [[ -n $rawhide && $(release_type) = "stable" ]]; then
       read_q "Would you like to upgrade to rawhide? [y/N] "
       [[ $REPLY =~ [yY] ]] && system_update rawhide
-    }
+    fi
   elif (( current < target )); then
     echo "A system update to fedora $(( current + 1 )) is available."
     read_q "Would you like to download it now? [y/N] "
