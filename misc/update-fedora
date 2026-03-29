@@ -31,7 +31,13 @@ synopsis() {
   tput bold
   echo "USAGE"
   tput sgr0
-  echo "       update-fedora [batch_commands]"
+  echo "       update-fedora [--rawhide] [batch_commands]"
+  echo
+  tput bold
+  echo "OPTIONS"
+  tput sgr0
+  echo "       --rawhide"
+  echo "              Suggest updating to rawhide, if system is fully up to date."
   echo
   tput bold
   echo "EXAMPLES"
