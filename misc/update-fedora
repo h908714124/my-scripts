@@ -101,7 +101,7 @@ check_updates_available() {
 system_update() {
   sudo dnf -y system-upgrade download --releasever=$1 && {
     read_q "A system update is prepared. Would you like to reboot right now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && sudo dnf -y offline reboot
+    [[ $REPLY =~ ^[yY]$ ]] && sudo dnf -y offline reboot
   }
 }
 
@@ -223,12 +223,12 @@ default_action() {
   if (( current == target )); then
     if [[ -n $rawhide && $(release_type) = "stable" ]]; then
       read_q "Would you like to upgrade to rawhide? [y/N] "
-      [[ $REPLY =~ [yY] ]] && system_update rawhide
+      [[ $REPLY =~ ^[yY]$ ]] && system_update rawhide
     fi
   elif (( current < target )); then
     echo "A system update to fedora $(( current + 1 )) is available."
     read_q "Would you like to download it now? [y/N] "
-    [[ $REPLY =~ [yY] ]] && system_update $(( current + 1 ))
+    [[ $REPLY =~ ^[yY]$ ]] && system_update $(( current + 1 ))
   fi
   return 0
 }
