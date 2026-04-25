@@ -1,9 +1,11 @@
 #!/bin/bash
 
+# example: press_down "one two three"
 press_down() {
-  local mychar mode value values i clr pos=0
-  values+=(one)
-  values+=(two)
+  local mychar mode val values i clr pos=0
+  for val in $1; do
+    values+=($val)
+  done
   clr="\r"
   for i in "${!values[@]}"; do
     clr="$clr\033[A\033[K"
@@ -18,21 +20,23 @@ press_down() {
     done
     read -rsN1 mychar
     read -t0.01 -rsN2 mode
-    if [[ -z $mode ]]; then
+    if [[ $mychar = $'\12' ]]; then
       break
     fi
-    if [[ $mode == "[B" ]]; then
+    if [[ $mychar = $'\33' && -z $mode ]]; then
+      break
+    fi
+    if [[ $mychar = "j" || $mode == "[B" ]]; then
       (( pos++ ))
-    elif [[ $mode == "[A" ]]; then
+    elif [[  $mychar = "k" || $mode == "[A" ]]; then
       (( pos-- ))
     fi
     (( pos < 0 && ( pos += ${#values[@]} ) ))
     (( pos = ( pos % ${#values[@]} ) ))
-    #echo "i=$i pos=$pos"
     1>&2 printf "$clr"
   done
 }
 
 return 2> /dev/null || {
-  press_down
+  press_down "$@"
 }
