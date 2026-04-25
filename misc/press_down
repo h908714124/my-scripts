@@ -1,17 +1,36 @@
 #!/bin/bash
 
 press_down() {
-  local mychar mode
-  echo "one <-"
-  echo two
-  read -rsN1 mychar
-  read -t0.1 -rsN2 mode
-  if [[ $mode != "[B" ]]; then # down arrow
-    return
-  fi
-  printf "\r\033[A\033[A\033[K" # up 2 lines
-  echo one
-  echo "two <-"
+  local mychar mode value values i clr pos=0
+  values+=(one)
+  values+=(two)
+  clr="\r"
+  for i in "${!values[@]}"; do
+    clr="$clr\033[A\033[K"
+  done
+  while :; do
+    for i in "${!values[@]}"; do
+      if (( i == pos )); then
+        1>&2 echo "${values[i]} <-"
+      else
+        1>&2 echo "${values[i]}"
+      fi
+    done
+    read -rsN1 mychar
+    read -t0.01 -rsN2 mode
+    if [[ -z $mode ]]; then
+      break
+    fi
+    if [[ $mode == "[B" ]]; then
+      (( pos++ ))
+    elif [[ $mode == "[A" ]]; then
+      (( pos-- ))
+    fi
+    (( pos < 0 && ( pos += ${#values[@]} ) ))
+    (( pos = ( pos % ${#values[@]} ) ))
+    #echo "i=$i pos=$pos"
+    1>&2 printf "$clr"
+  done
 }
 
 return 2> /dev/null || {
