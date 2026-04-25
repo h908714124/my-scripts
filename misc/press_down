@@ -1,0 +1,19 @@
+#!/bin/bash
+
+press_down() {
+  local mychar mode
+  echo "one <-"
+  echo two
+  read -rsN1 mychar
+  read -t0.1 -rsN2 mode
+  if [[ $mode != "[B" ]]; then # down arrow
+    return
+  fi
+  printf "\r\033[A\033[A\033[K" # up 2 lines
+  echo one
+  echo "two <-"
+}
+
+return 2> /dev/null || {
+  press_down
+}
