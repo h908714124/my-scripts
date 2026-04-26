@@ -2,22 +2,24 @@
 
 # example: press_down "one two three"
 press_down() {
-  local mychar mode val values i clr pos=0
+  local mychar mode val values i buf clr pos=0
   for val in $1; do
-    values+=($val)
+    values+=("$val")
   done
   clr="\r"
   for i in "${!values[@]}"; do
     clr="$clr\033[A\033[K"
   done
   while :; do
+    buf=""
     for i in "${!values[@]}"; do
       if (( i == pos )); then
-        1>&2 echo "${values[i]} <-"
+        buf="$buf""-> ${values[i]}"$'\n'
       else
-        1>&2 echo "${values[i]}"
+        buf="$buf""   ${values[i]}"$'\n'
       fi
     done
+    1>&2 echo -n "$buf"
     read -rsN1 mychar
     read -t0.01 -rsN2 mode
     if [[ $mychar = $'\12' ]]; then
@@ -38,5 +40,5 @@ press_down() {
 }
 
 return 2> /dev/null || {
-  press_down "$@"
+  press_down "$1"
 }
