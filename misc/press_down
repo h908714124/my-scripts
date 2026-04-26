@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# example: press_down "one two three"
+# example: press_down $'one\ntwo\nthree\n'
 press_down() {
   local mychar mode val values i buf clr pos=0
   for val in $1; do
