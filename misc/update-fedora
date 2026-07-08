@@ -48,6 +48,8 @@ synopsis() {
   echo "              Batch mode: perform commands 'u'(pdate), 'o'(ffline) and 'r'(eboot) in sequence."
   echo "              Warning! If any updates are available,"
   echo "              this will perform an offline update and reboot your computer."
+  echo "       update-fedora uop"
+  echo "              Like \"uor\", but power off the machine instead of rebooting again."
   echo "       update-fedora sq"
   echo "              Batch mode: perform commands 's'(how) and 'q'(uit) in sequence."
   echo "              Show available updates, then quit."
@@ -112,18 +114,25 @@ update_running() {
 submenu_update_prepared() {
   echo "An offline-update is prepared."
   while true; do
-    read_q "[r]eboot [c]lean [q]uit ? "
+    read_q "[r]eboot [p]oweroff [c]lean [q]uit ? "
     case $REPLY in
       r)
         sudo dnf -y offline reboot
-        return 0
+        return
+        ;;
+      p)
+        sudo dnf -y offline reboot --poweroff
+        return
         ;;
       c)
         sudo dnf -y offline clean
-        return 0
+        return
         ;;
       q)
-        return 0
+        return
+        ;;
+      *)
+        echo "Unknown command: $REPLY"
         ;;
     esac
   done
